@@ -1,23 +1,23 @@
-library spider;
+library unwired;
 
 import 'dart:async';
 import 'dart:math';
 import 'package:http/http.dart' as http;
-import 'package:spider/httpworker.dart';
-import 'package:spider/response.dart';
-import 'package:spider/tokenhandler.dart' as TokenHandler;
-import 'package:spider/url_route.dart';
+import 'package:unwired/httpworker.dart';
+import 'package:unwired/response.dart';
+import 'package:unwired/tokenhandler.dart' as TokenHandler;
+import 'package:unwired/url_route.dart';
 import 'calltype.dart';
 
 /// Spider - Handles network tasks such as authenticated calls, response parsing and multi-threading.
-class Spider {
+class Unwired {
 
-  static late Spider _spider = Spider._();
+  static late Unwired _spider = Unwired._();
 
-  Spider._();
+  Unwired._();
 
   /// Returns Singleton instance of spider
-  static Spider getInstance(){
+  static Unwired getInstance(){
     return _spider;
   }
 
@@ -39,7 +39,7 @@ class Spider {
   Future initialiseNetwork({Function(String?)? tokenModifier, int? maxReqestQueueSize}) async{
     if(tokenModifier!=null) _modifyToken = tokenModifier;
     if(maxReqestQueueSize!=null) _MAX_REQUESTS = maxReqestQueueSize;
-    await SpiderWeb.init();
+    await UnwiredWeb.init();
   }
 
 
@@ -88,7 +88,7 @@ class Spider {
       'token': token,
     };
     print(data.runtimeType);
-    SpiderWeb.sendRequest(data, response: response).then((value){
+    UnwiredWeb.sendRequest(data, response: response).then((value){
       _idQueue.remove(id);
       response.completeWith(value);
     });

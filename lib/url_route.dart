@@ -1,4 +1,4 @@
-import 'package:spider/json_model.dart';
+import 'package:unwired/json_model.dart';
 
 
 /// Class containing response model constructor ([_jsonModelConstructor]), [route] and base [URL]

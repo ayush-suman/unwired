@@ -5,12 +5,12 @@ import 'dart:isolate';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as Http;
 import 'package:http/io_client.dart';
-import 'package:spider/response.dart';
-import 'package:spider/url_route.dart';
+import 'package:unwired/response.dart';
+import 'package:unwired/url_route.dart';
 import 'calltype.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-class SpiderWeb {
+class UnwiredWeb {
   static final _RequestDataHandler _requestDataHandler = _RequestDataHandler();
 
   static late ReceivePort _receivePort;
@@ -136,23 +136,23 @@ void _entryFunction(var meta) async {
   // As data comes to the network isolate, it is added to a notifier
   receivePort.listen((message) {
     if (message[0] is Map) {
-      SpiderWeb._requestDataHandler.addData(message);
+      UnwiredWeb._requestDataHandler.addData(message);
     } else {
       print('id received ' + message.toString());
-      SpiderWeb._requestDataHandler.removeData(message[0]);
+      UnwiredWeb._requestDataHandler.removeData(message[0]);
     }
   });
 
   // notifier reacts to arrived data
-  SpiderWeb._requestDataHandler.addListener(() async {
+  UnwiredWeb._requestDataHandler.addListener(() async {
     SendPort childSendPort;
     print("child received");
-    int id = SpiderWeb._requestDataHandler.newId;
-    childSendPort = SpiderWeb._requestDataHandler._sendPorts[id]!;
-    var data = SpiderWeb._requestDataHandler._datas.singleWhere((
+    int id = UnwiredWeb._requestDataHandler.newId;
+    childSendPort = UnwiredWeb._requestDataHandler._sendPorts[id]!;
+    var data = UnwiredWeb._requestDataHandler._datas.singleWhere((
         element) => element['id'] == id);
     late CALLTYPE call;
-    IOClient client = SpiderWeb._requestDataHandler._clients[id]!;
+    IOClient client = UnwiredWeb._requestDataHandler._clients[id]!;
     bool? auth;
     Map<String, String>? header;
     Map<String, String>? param;
@@ -196,7 +196,7 @@ void _entryFunction(var meta) async {
           break;
       }
       print(response.body);
-      if (!SpiderWeb._requestDataHandler._isCancelled[id]!) {
+      if (!UnwiredWeb._requestDataHandler._isCancelled[id]!) {
         dynamic modelClass;
         dynamic decoded = jsonDecode(response.body);
         print(decoded.toString());
@@ -217,9 +217,9 @@ void _entryFunction(var meta) async {
       print("Error: " + e.toString());
       childSendPort.send(e);
     } finally {
-      SpiderWeb._requestDataHandler.removeData(id);
+      UnwiredWeb._requestDataHandler.removeData(id);
     }
-    SpiderWeb._requestDataHandler._isCancelled.remove(id);
+    UnwiredWeb._requestDataHandler._isCancelled.remove(id);
   });
 }
 
@@ -229,22 +229,22 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
 
   StreamSubscription streamSubscription = stream.listen((message) {
     if (message[0] is Map) {
-      SpiderWeb._requestDataHandler.addData(message);
+      UnwiredWeb._requestDataHandler.addData(message);
     } else {
       print('id received ' + message.toString());
-      SpiderWeb._requestDataHandler.removeData(message[0]);
+      UnwiredWeb._requestDataHandler.removeData(message[0]);
     }
   });
 
-  SpiderWeb._requestDataHandler.addListener(() async {
+  UnwiredWeb._requestDataHandler.addListener(() async {
     StreamController childStreamController;
     print("child received");
-    int id = SpiderWeb._requestDataHandler.newId;
-    childStreamController = SpiderWeb._requestDataHandler._streamConts[id]!;
-    var data = SpiderWeb._requestDataHandler._datas.singleWhere((
+    int id = UnwiredWeb._requestDataHandler.newId;
+    childStreamController = UnwiredWeb._requestDataHandler._streamConts[id]!;
+    var data = UnwiredWeb._requestDataHandler._datas.singleWhere((
         element) => element['id'] == id);
     late CALLTYPE call;
-    IOClient client = SpiderWeb._requestDataHandler._clients[id]!;
+    IOClient client = UnwiredWeb._requestDataHandler._clients[id]!;
     bool? auth;
     Map<String, String>? header;
     Map<String, String>? param;
@@ -288,7 +288,7 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
           break;
       }
       print(response.body);
-      if (!SpiderWeb._requestDataHandler._isCancelled[id]!) {
+      if (!UnwiredWeb._requestDataHandler._isCancelled[id]!) {
         dynamic modelClass;
         dynamic decoded = jsonDecode(response.body);
         print(decoded.toString());
@@ -310,9 +310,9 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
       print("Error: " + e.toString());
       childStreamController.add(e);
     } finally {
-      SpiderWeb._requestDataHandler.removeData(id);
+      UnwiredWeb._requestDataHandler.removeData(id);
     }
-    SpiderWeb._requestDataHandler._isCancelled.remove(id);
+    UnwiredWeb._requestDataHandler._isCancelled.remove(id);
   });
 
   return streamSubscription;

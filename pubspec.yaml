@@ -1,8 +1,8 @@
-name: spider
-description: Spider is a client library for handling (authenticated) multi-threaded disposable network calls,  data parsing and authentication in applications.
+name: unwired
+description: Unwired is a client library for handling (authenticated) multi-threaded disposable network calls,  data parsing and authentication in applications.
 version: 0.1.0
 author: Ayush Suman
-homepage:
+homepage: https://github.com/Ayush-Suman/spider
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -14,3 +14,7 @@ dependencies:
   http: ^0.13.2
   flutter_secure_storage: ^4.2.0
   localstorage: ^4.0.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

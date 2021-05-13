@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## [0.1.0] - 13th May 2021.
 
-* TODO: Describe initial release.
+* Make network request with disposable feature and multi-threading.

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:spider/httpworker.dart';
+import 'package:unwired/httpworker.dart';
 
 
 /// [T] is the return type of response and [J] is the model class for parsing response data
@@ -13,7 +13,7 @@ class Response<T,J>{
   /// Dispose the ongoing network call
   /// Clears the call from network request queue
   void dispose(){
-    SpiderWeb.sendRequest(_id);
+    UnwiredWeb.sendRequest(_id);
   }
 
   /// Complete onGoing network call with result.
