@@ -9,6 +9,8 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   http: ^0.13.2
   flutter_secure_storage: ^4.2.0
   localstorage: ^4.0.0+1
