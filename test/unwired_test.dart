@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:unwired/json_model.dart';
 import 'package:unwired/response.dart';
-
 import 'package:unwired/unwired.dart';
 import 'package:unwired/url_route.dart';
 import 'package:unwired/calltype.dart';
