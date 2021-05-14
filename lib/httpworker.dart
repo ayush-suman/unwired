@@ -171,7 +171,7 @@ void _entryFunction(var meta) async {
     final Uri uri = Uri.https(route.URL, route.route, param);
     print(uri);
     Map<String, String> headerData = Map.from(
-        {HttpHeaders.contentTypeHeader: 'application/json'});
+        {HttpHeaders.contentTypeHeader: route.contentType??'application/x-www-form-urlencoded'});
     if (auth ?? false) {
       headerData.addAll(
           Map.from({HttpHeaders.authorizationHeader: data['token']}));
@@ -263,7 +263,7 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
     final Uri uri = Uri.https(route.URL, route.route, param);
     print(uri);
     Map<String, String> headerData = Map.from(
-        {HttpHeaders.contentTypeHeader: 'application/json'});
+        {HttpHeaders.contentTypeHeader: route.contentType??'application/x-www-form-urlencoded'});
     if (auth ?? false) {
       headerData.addAll(
           Map.from({HttpHeaders.authorizationHeader: data['token']}));

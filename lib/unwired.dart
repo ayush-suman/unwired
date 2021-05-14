@@ -64,7 +64,7 @@ class Unwired {
   /// In some cases [T] and [J] might be same.
   /// These will differ if response is list of something. That something (model class) will be [J] and list (response) will be [T]
   Future<Response<T, J>> request<T, J>({required URLRoute route,
-    required CALLTYPE call,
+    @deprecated CALLTYPE? call,
     Map<String, String>? param,
     Map<String, dynamic>? header,
     Map<String, dynamic>? body,
@@ -80,7 +80,7 @@ class Unwired {
     Map<String, dynamic> data = {
       'id':id,
       'route':route,
-      'call':call,
+      'call': call??route.calltype,
       'param':param,
       'header':header,
       'body':body,

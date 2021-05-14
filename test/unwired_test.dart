@@ -7,7 +7,7 @@ import 'package:unwired/calltype.dart';
 
 
 class TestURLRoute<T> extends URLRoute<T>{
-  TestURLRoute(String route, JSONModelConstructor<T> jsonModelConstructor) : super("api.github.com", route, jsonModelConstructor);
+  TestURLRoute(String route, JSONModelConstructor<T> jsonModelConstructor) : super("api.github.com", route, CALLTYPE.GET, jsonModelConstructor);
 }
 
 class ResponseClass {

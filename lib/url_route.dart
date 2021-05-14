@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:unwired/calltype.dart';
 import 'package:unwired/json_model.dart';
 
 
@@ -8,11 +11,14 @@ abstract class URLRoute<T>{
 
   final String URL;
   final String route;
+  final CALLTYPE calltype;
+  final String? contentType;
 
   final JSONModelConstructor<T> _jsonModelConstructor;
 
   T getModelClass(Map<String, dynamic> data) => _jsonModelConstructor.fromMap(data);
 
 
-  URLRoute(this.URL, this.route, this._jsonModelConstructor);
+  URLRoute(this.URL, this.route, this.calltype, this._jsonModelConstructor, {this.contentType});
 }
+
