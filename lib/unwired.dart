@@ -76,6 +76,8 @@ class Unwired {
     int id = _idGenerator();
     print(id);
     Response<T, J> response = Response<T, J>(id);
+    print(call);
+    print(route.calltype);
 
     Map<String, dynamic> data = {
       'id':id,
@@ -87,7 +89,7 @@ class Unwired {
       'auth':auth,
       'token': token,
     };
-    print(data.runtimeType);
+
     UnwiredWeb.sendRequest(data, response: response).then((value){
       _idQueue.remove(id);
       response.completeWith(value);

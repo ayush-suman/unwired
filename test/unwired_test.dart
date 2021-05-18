@@ -7,16 +7,16 @@ import 'package:unwired/calltype.dart';
 
 
 class TestURLRoute<T> extends URLRoute<T>{
-  TestURLRoute(String route, JSONModelConstructor<T> jsonModelConstructor) : super("api.github.com", route, CALLTYPE.GET, jsonModelConstructor);
+  TestURLRoute({required String route, required JSONModelConstructor<T> jsonModelConstructor, required CALLTYPE calltype, String? contentType}) : super("xxx", route, calltype, jsonModelConstructor, contentType: contentType);
 }
 
 class ResponseClass {
-  final id;
-  final name;
-  ResponseClass(this.id, this.name);
+  final success;
+
+  ResponseClass(this.success);
 
   static ResponseClass fromJSON(Map<String, dynamic> data){
-    return ResponseClass(data["id"], data["name"]);
+    return ResponseClass(data["success"]);
   }
 }
 
@@ -33,11 +33,11 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     final spider = Unwired.getInstance();
     await spider.initialiseNetwork();
-    final testUrlRoute =TestURLRoute<ResponseClass>("/orgs/DSCBits/repos",  TestConstructor());
-    Response<List<ResponseClass>, ResponseClass> response = await spider.request<List<ResponseClass>, ResponseClass>(route: testUrlRoute, call: CALLTYPE.GET );
+    final testUrlRoute = TestURLRoute<ResponseClass>(route: 'patient/requestOTP', calltype: CALLTYPE.POST, jsonModelConstructor: TestConstructor());
+    Response<ResponseClass, ResponseClass> response = await spider.request<ResponseClass, ResponseClass>(route: testUrlRoute, body: {"phone": "7762961997"});
     try {
       var value = await response.response;
-      print(value[0].id);
+      print(value.success);
     }catch(e){
       print("Exception");
     }

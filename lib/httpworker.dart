@@ -10,6 +10,9 @@ import 'package:unwired/url_route.dart';
 import 'calltype.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+const String _defaultContentType = "application/json";
+
+
 class UnwiredWeb {
   static final _RequestDataHandler _requestDataHandler = _RequestDataHandler();
 
@@ -23,6 +26,8 @@ class UnwiredWeb {
   static Completer<void> _isolateReady = Completer<void>();
 
   static Future<void> get _isReady => _isolateReady.future;
+
+
 
 
   static Future init() async {
@@ -171,7 +176,7 @@ void _entryFunction(var meta) async {
     final Uri uri = Uri.https(route.URL, route.route, param);
     print(uri);
     Map<String, String> headerData = Map.from(
-        {HttpHeaders.contentTypeHeader: route.contentType??'application/x-www-form-urlencoded'});
+        {HttpHeaders.contentTypeHeader: route.contentType??_defaultContentType});
     if (auth ?? false) {
       headerData.addAll(
           Map.from({HttpHeaders.authorizationHeader: data['token']}));
@@ -184,13 +189,20 @@ void _entryFunction(var meta) async {
 
     try {
       late Http.Response response;
+      print(call);
       switch (call) {
         case CALLTYPE.GET:
           response = await client.get(uri, headers: headerData);
           break;
         case CALLTYPE.POST:
-          var parsedBody = jsonEncode(body);
-          response = await client.post(uri, headers: headerData, body: parsedBody);
+          if((route.contentType??_defaultContentType)=='application/json') {
+            var parsedBody = jsonEncode(body);
+            print("body: $parsedBody");
+            response =
+            await client.post(uri, headers: headerData, body: parsedBody);
+          }else{
+            await client.post(uri, headers: headerData, body: body);
+          }
           break;
         case CALLTYPE.DEL:
           response = await client.delete(uri, headers: headerData);
@@ -264,7 +276,7 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
     final Uri uri = Uri.https(route.URL, route.route, param);
     print(uri);
     Map<String, String> headerData = Map.from(
-        {HttpHeaders.contentTypeHeader: route.contentType??'application/x-www-form-urlencoded'});
+        {HttpHeaders.contentTypeHeader: route.contentType??_defaultContentType});
     if (auth ?? false) {
       headerData.addAll(
           Map.from({HttpHeaders.authorizationHeader: data['token']}));
@@ -282,8 +294,14 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
           response = await client.get(uri, headers: headerData);
           break;
         case CALLTYPE.POST:
-          var parsedBody = jsonEncode(body);
-          response = await client.post(uri, headers: headerData, body: parsedBody);
+          if((route.contentType??_defaultContentType)=='application/json') {
+            var parsedBody = jsonEncode(body);
+            print("body: $parsedBody");
+            response =
+            await client.post(uri, headers: headerData, body: parsedBody);
+          }else{
+            await client.post(uri, headers: headerData, body: body);
+          }
           break;
         case CALLTYPE.DEL:
           response = await client.delete(uri, headers: headerData);
