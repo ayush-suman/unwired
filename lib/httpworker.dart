@@ -189,7 +189,8 @@ void _entryFunction(var meta) async {
           response = await client.get(uri, headers: headerData);
           break;
         case CALLTYPE.POST:
-          response = await client.post(uri, headers: headerData, body: body);
+          var parsedBody = jsonEncode(body);
+          response = await client.post(uri, headers: headerData, body: parsedBody);
           break;
         case CALLTYPE.DEL:
           response = await client.delete(uri, headers: headerData);
@@ -281,7 +282,8 @@ StreamSubscription _webEntryFunction(StreamController streamController) {
           response = await client.get(uri, headers: headerData);
           break;
         case CALLTYPE.POST:
-          response = await client.post(uri, headers: headerData, body: body);
+          var parsedBody = jsonEncode(body);
+          response = await client.post(uri, headers: headerData, body: parsedBody);
           break;
         case CALLTYPE.DEL:
           response = await client.delete(uri, headers: headerData);
