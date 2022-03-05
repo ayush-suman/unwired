@@ -14,9 +14,13 @@ abstract class URLRoute<T>{
   final CALLTYPE calltype;
   final String? contentType;
 
-  final JSONModelConstructor<T> _jsonModelConstructor;
+  final JSONModelConstructor<T>? _jsonModelConstructor;
 
-  T getModelClass(Map<String, dynamic> data) => _jsonModelConstructor.fromMap(data);
+  T getModelClass(Map<String, dynamic> data) {
+    return  _jsonModelConstructor != null
+        ? _jsonModelConstructor!.fromMap(data)
+        : data as T;
+  }
 
 
   URLRoute(this.URL, this.route, this.calltype, this._jsonModelConstructor, {this.contentType});
