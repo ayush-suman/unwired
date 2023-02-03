@@ -23,6 +23,6 @@ abstract class URLRoute<T>{
   }
 
 
-  URLRoute(this.URL, this.route, this.calltype, this._jsonModelConstructor, {this.contentType});
+  URLRoute(this.URL, this.route, this.calltype=CALLTYPE.GET, this._jsonModelConstructor, {this.contentType});
 }
 
