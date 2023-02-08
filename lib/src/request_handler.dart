@@ -116,6 +116,14 @@ class RequestHandler {
     return request(method: RequestMethod.post, url: url, params: params, body: body, auth: auth);
   }
 
+  Future authorize(String token) async {
+    await _authManager.authorize(token);
+  }
+
+  Future unauthorize() async {
+    await _authManager.unauthorize();
+  }
+
   _killRequest(int id) {
     _worker
         .killRequest(id)
