@@ -60,7 +60,7 @@ class RequestHandler {
       {RequestMethod method = RequestMethod.get,
       required String url,
       Map<String, String>? params,
-      Map<String, dynamic>? header,
+      Map<String, String>? header,
       Object? body,
       bool auth = false}) {
     int id = _requestQueueManager.createNewQueueObject();
@@ -92,7 +92,7 @@ class RequestHandler {
     );
 
     return Cancellable(completer.future, onCancel: () {
-      completer.complete(Response(isCancelled: true));
+      completer.complete(Response(status: -1, isCancelled: true));
       _killRequest(id);
     });
   }
@@ -101,17 +101,16 @@ class RequestHandler {
   Cancellable get(
       {required String url,
         Map<String, String>? params,
-        Map<String, dynamic>? header,
-        Object? body,
+        Map<String, String>? header,
         bool auth = false}) {
-    return request(method: RequestMethod.get, url: url, params: params, body: body, auth: auth);
+    return request(method: RequestMethod.get, url: url, params: params, auth: auth);
   }
 
   /// Function to make a POST network request
   Cancellable post(
       {required String url,
         Map<String, String>? params,
-        Map<String, dynamic>? header,
+        Map<String, String>? header,
         Object? body,
         bool auth = false}) {
     return request(method: RequestMethod.post, url: url, params: params, body: body, auth: auth);

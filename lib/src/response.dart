@@ -1,6 +1,7 @@
 class Response<D> {
-  Response({this.data, this.error, this.isCancelled=false}): hasError = error!=null;
+  Response({required this.status, this.data, this.error, this.isCancelled=false}): hasError = error!=null;
 
+  final int status;
   final D? data;
   final bool hasError;
   final Object? error;
@@ -21,4 +22,10 @@ class Cancellable<T> {
     _cancelled = true;
     onCancel?.call();
   }
+}
+
+class StatusCode {
+  static const int Cancelled = -1;
+  static const int OK = 200;
+  static const int NotFound = 404;
 }

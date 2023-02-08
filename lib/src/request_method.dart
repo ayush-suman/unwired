@@ -3,9 +3,8 @@ enum RequestMethod {
  post,
  put,
  delete,
- option,
- trace,
- patch
+ patch,
+ head
 }
 
 extension Str on RequestMethod {

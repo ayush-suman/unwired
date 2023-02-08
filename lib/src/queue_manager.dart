@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:unwired/src/response.dart';
+
 abstract class QueueManager<T> {
   final Set<T> _queue = Set<T>();
 
@@ -5,12 +9,17 @@ abstract class QueueManager<T> {
     return _queue.add(element);
   }
 
-  bool queueContains(T element) {
-    return _queue.contains(element);
+  bool queueContains(bool Function(T) filter) {
+    final items = _queue.where(filter);
+    return items.isNotEmpty;
   }
 
   bool removeFromQueue(T element) {
     return _queue.remove(element);
+  }
+
+  void removeFromQueueIf(bool Function(T) filter) {
+    _queue.removeWhere(filter);
   }
 
   T createNewQueueObject() {
@@ -22,7 +31,7 @@ class RequestIdQueueManager extends QueueManager<int> {
   int _counter = 0;
 
   int _getUnusedId() {
-    while (queueContains(_counter)) {
+    while (queueContains((id) => id == _counter)) {
       _counter++;
     }
     return _counter;
@@ -36,5 +45,11 @@ class RequestIdQueueManager extends QueueManager<int> {
     }
     return id;
   }
+}
 
+class CompleterQueueManager extends QueueManager<Map<int, Completer<Response>>> {
+  @override
+  Map<int, Completer<Response>> createNewQueueObject() {
+    throw UnsupportedError('Cant create new queue objects');
+  }
 }
