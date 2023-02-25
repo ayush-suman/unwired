@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:unwired/src/auth_manager.dart';
 import 'package:unwired/src/http_worker.dart';
+import 'package:unwired/src/parser.dart';
 import 'package:unwired/src/queue_manager.dart';
 import 'package:unwired/src/request_method.dart';
 import 'package:unwired/src/response.dart';
@@ -56,13 +57,14 @@ class RequestHandler {
 
 
   /// Function to make a network request
-  Cancellable request(
+  Cancellable<T> request<T>(
       {RequestMethod method = RequestMethod.get,
       required String url,
       Map<String, String>? params,
       Map<String, String>? header,
       Object? body,
-      bool auth = false}) {
+      bool auth = false,
+      Parser<T>? parser}) {
     int id = _requestQueueManager.createNewQueueObject();
 
     // Add params to url for parsing into Uri
@@ -83,12 +85,13 @@ class RequestHandler {
           ? header = {'Authorization': _authManager.authObject}
           : header.addAll({'Authorization': _authManager.authObject});
 
-    Completer<Response> completer = _worker.processRequest(
+    Completer<Response<T>> completer = _worker.processRequest<T>(
       id,
       method,
       uri,
       header,
-      body
+      body,
+      parser
     );
 
     return Cancellable(completer.future, onCancel: () {
@@ -98,22 +101,26 @@ class RequestHandler {
   }
 
   /// Function to make a GET network request
-  Cancellable get(
+  Cancellable<T> get<T>(
       {required String url,
         Map<String, String>? params,
         Map<String, String>? header,
-        bool auth = false}) {
-    return request(method: RequestMethod.get, url: url, params: params, auth: auth);
+        bool auth = false,
+        Parser<T>? parser
+      }) {
+    return request(method: RequestMethod.get, url: url, params: params, auth: auth, parser: parser);
   }
 
   /// Function to make a POST network request
-  Cancellable post(
+  Cancellable<T> post<T>(
       {required String url,
         Map<String, String>? params,
         Map<String, String>? header,
         Object? body,
-        bool auth = false}) {
-    return request(method: RequestMethod.post, url: url, params: params, body: body, auth: auth);
+        bool auth = false,
+        Parser<T>? parser
+      }) {
+    return request(method: RequestMethod.post, url: url, params: params, body: body, auth: auth, parser: parser);
   }
 
   Future authorize(String token) async {

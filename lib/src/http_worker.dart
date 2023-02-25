@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:unwired/src/parser.dart';
 import 'package:unwired/src/queue_manager.dart';
 import 'package:unwired/src/request_method.dart';
 import 'package:unwired/src/response.dart' as response;
@@ -8,8 +10,8 @@ import 'package:http/http.dart' as http;
 abstract class HttpWorker {
   Future init();
 
-  Completer<response.Response> processRequest(int id, RequestMethod method,
-      Uri url, Map<String, String>? header, Object? body);
+  Completer<response.Response<T>> processRequest<T>(int id, RequestMethod method,
+      Uri url, Map<String, String>? header, Object? body, Parser<T>? parser);
 
   Future killRequest(int id);
 
@@ -21,8 +23,8 @@ class NativeHttpWorker extends HttpWorker {
   Future init() async {}
 
   @override
-  Completer<response.Response> processRequest(int id, RequestMethod method,
-      Uri url, Map<String, String>? header, Object? body) {
+  Completer<response.Response<T>> processRequest<T>(int id, RequestMethod method,
+      Uri url, Map<String, String>? header, Object? body, Parser<T>? parser) {
     // TODO: implement processRequest
     throw UnimplementedError();
   }
@@ -39,8 +41,8 @@ class WebHttpWorker extends HttpWorker {
   Future init() async {}
 
   @override
-  Completer<response.Response> processRequest(int id, RequestMethod method,
-      Uri url, Map<String, String>? header, Object? body) {
+  Completer<response.Response<T>> processRequest<T>(int id, RequestMethod method,
+      Uri url, Map<String, String>? header, Object? body, Parser<T>? parser) {
     // TODO: implement processRequest
     throw UnimplementedError();
   }
@@ -60,69 +62,104 @@ class DebugHttpWorker extends HttpWorker {
   }
 
   @override
-  Completer<response.Response> processRequest(
+  Completer<response.Response<T>> processRequest<T>(
       int id,
       RequestMethod method,
       Uri url,
       Map<String, String>? header,
-      Object? body) {
+      Object? body,
+      Parser<T>? parser) {
 
-    Completer<response.Response> completer = Completer<response.Response>();
+    Completer<response.Response<T>> completer = Completer<response.Response<T>>();
     queueManager.addToQueue({id: completer});
 
     switch (method) {
       case RequestMethod.get:
         http.get(url, headers: header).then((value) {
-          // TODO: Parse response body
-          completer.complete(
-              response.Response(status: value.statusCode, data: value.body));
-          queueManager.removeFromQueueIf((p0) => p0[id]!=null);
+          final json = jsonDecode(value.body);
+          try {
+            T? data = parser?.fromJson(json);
+            completer.complete(
+                response.Response(status: value.statusCode, data: data??json));
+          } catch (e) {
+            completer.complete(
+              response.Response(status: value.statusCode, error: e));
+          } finally {
+            queueManager.removeFromQueueIf((p0) => p0[id] != null);
+          }
         });
         break;
       case RequestMethod.post:
         http.post(url, headers: header, body: body).then((value) {
-          // TODO: Parse response body
-          completer.complete(
-              response.Response(status: value.statusCode, data: value.body));
-          queueManager.removeFromQueueIf((p0) => p0[id]!=null);
+          final json = jsonDecode(value.body);
+          try {
+            T? data = parser?.fromJson(json);
+            completer.complete(
+                response.Response(status: value.statusCode, data: data??json));
+          } catch (e) {
+            completer.complete(
+                response.Response(status: value.statusCode, error: e));
+          } finally {
+            queueManager.removeFromQueueIf((p0) => p0[id] != null);
+          }
         });
         break;
       case RequestMethod.put:
         http.put(url, headers: header, body: body).then((value) {
-          // TODO: Parse response body
-          if (queueManager.queueContains((p0) => p0[id]!=null)) {
+          final json = jsonDecode(value.body);
+          try {
+            T? data = parser?.fromJson(json);
             completer.complete(
-                response.Response(status: value.statusCode, data: value.body));
+                response.Response(status: value.statusCode, data: data??json));
+          } catch (e) {
+            completer.complete(
+                response.Response(status: value.statusCode, error: e));
+          } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
         });
         break;
       case RequestMethod.delete:
         http.delete(url, headers: header, body: body).then((value) {
-          // TODO: Parse response body
-          if (queueManager.queueContains((p0) => p0[id]!=null)) {
+          final json = jsonDecode(value.body);
+          try {
+            T? data = parser?.fromJson(json);
             completer.complete(
-                response.Response(status: value.statusCode, data: value.body));
+                response.Response(status: value.statusCode, data: data??json));
+          } catch (e) {
+            completer.complete(
+                response.Response(status: value.statusCode, error: e));
+          } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
         });
         break;
       case RequestMethod.patch:
         http.patch(url, headers: header, body: body).then((value) {
-          // TODO: Parse response body
-          if (queueManager.queueContains((p0) => p0[id]!=null)) {
+          final json = jsonDecode(value.body);
+          try {
+            T? data = parser?.fromJson(json);
             completer.complete(
-                response.Response(status: value.statusCode, data: value.body));
+                response.Response(status: value.statusCode, data: data??json));
+          } catch (e) {
+            completer.complete(
+                response.Response(status: value.statusCode, error: e));
+          } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
         });
         break;
       case RequestMethod.head:
         http.head(url, headers: header).then((value) {
-          // TODO: Parse response body
-          if (queueManager.queueContains((p0) => p0[id]!=null)) {
+          final json = jsonDecode(value.body);
+          try {
+            T? data = parser?.fromJson(json);
             completer.complete(
-                response.Response(status: value.statusCode, data: value.body));
+                response.Response(status: value.statusCode, data: data??json));
+          } catch (e) {
+            completer.complete(
+                response.Response(status: value.statusCode, error: e));
+          } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
         });
