@@ -68,11 +68,11 @@ class RequestHandler {
     // Add params to url for parsing into Uri
     if (url.contains('?')) {
       url = params != null
-          ? '$url&${params.entries.map((e) => "'${e.key}'='${e.value}'").join('&')}'
+          ? '$url&${params.entries.map((e) => "${e.key}=${e.value}").join('&')}'
           : url;
     } else {
       url = params != null
-          ? '$url?${params.entries.map((e) => "'${e.key}'='${e.value}'").join('&')}'
+          ? '$url?${params.entries.map((e) => "${e.key}=${e.value}").join('&')}'
           : url;
     }
     Uri uri = Uri.parse(url);
