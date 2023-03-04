@@ -131,6 +131,10 @@ class RequestHandler {
     await _authManager.unauthorize();
   }
 
+  Future get isAuthorised async {
+    return _authManager.isAuthorised;
+}
+
   _killRequest(int id) {
     _worker
         .killRequest(id)

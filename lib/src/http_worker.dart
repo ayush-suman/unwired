@@ -78,7 +78,7 @@ class DebugHttpWorker extends HttpWorker {
         http.get(url, headers: header).then((value) {
           final json = jsonDecode(value.body);
           try {
-            T? data = parser?.fromJson(json);
+            T? data = parser?.parse(json);
             completer.complete(
                 response.Response(status: value.statusCode, data: data??json));
           } catch (e) {
@@ -93,7 +93,7 @@ class DebugHttpWorker extends HttpWorker {
         http.post(url, headers: header, body: body).then((value) {
           final json = jsonDecode(value.body);
           try {
-            T? data = parser?.fromJson(json);
+            T? data = parser?.parse(json);
             completer.complete(
                 response.Response(status: value.statusCode, data: data??json));
           } catch (e) {
@@ -108,7 +108,7 @@ class DebugHttpWorker extends HttpWorker {
         http.put(url, headers: header, body: body).then((value) {
           final json = jsonDecode(value.body);
           try {
-            T? data = parser?.fromJson(json);
+            T? data = parser?.parse(json);
             completer.complete(
                 response.Response(status: value.statusCode, data: data??json));
           } catch (e) {
@@ -123,7 +123,7 @@ class DebugHttpWorker extends HttpWorker {
         http.delete(url, headers: header, body: body).then((value) {
           final json = jsonDecode(value.body);
           try {
-            T? data = parser?.fromJson(json);
+            T? data = parser?.parse(json);
             completer.complete(
                 response.Response(status: value.statusCode, data: data??json));
           } catch (e) {
@@ -138,7 +138,7 @@ class DebugHttpWorker extends HttpWorker {
         http.patch(url, headers: header, body: body).then((value) {
           final json = jsonDecode(value.body);
           try {
-            T? data = parser?.fromJson(json);
+            T? data = parser?.parse(json);
             completer.complete(
                 response.Response(status: value.statusCode, data: data??json));
           } catch (e) {
@@ -153,7 +153,7 @@ class DebugHttpWorker extends HttpWorker {
         http.head(url, headers: header).then((value) {
           final json = jsonDecode(value.body);
           try {
-            T? data = parser?.fromJson(json);
+            T? data = parser?.parse(json);
             completer.complete(
                 response.Response(status: value.statusCode, data: data??json));
           } catch (e) {
