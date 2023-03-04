@@ -131,7 +131,7 @@ class RequestHandler {
     await _authManager.unauthorize();
   }
 
-  Future get isAuthorised async {
+  bool get isAuthorised {
     return _authManager.isAuthorised;
 }
 
