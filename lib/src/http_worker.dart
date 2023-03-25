@@ -87,7 +87,7 @@ class DebugHttpWorker extends HttpWorker {
           } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
-        });
+        }, onError: (e) => completer.complete(response.Response(status: -1, error: e)));
         break;
       case RequestMethod.post:
         http.post(url, headers: header, body: body).then((value) {
@@ -102,7 +102,7 @@ class DebugHttpWorker extends HttpWorker {
           } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
-        });
+        }, onError: (e) => completer.complete(response.Response(status: -1, error: e)));
         break;
       case RequestMethod.put:
         http.put(url, headers: header, body: body).then((value) {
@@ -117,7 +117,7 @@ class DebugHttpWorker extends HttpWorker {
           } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
-        });
+        }, onError: (e) => completer.complete(response.Response(status: -1, error: e)));
         break;
       case RequestMethod.delete:
         http.delete(url, headers: header, body: body).then((value) {
@@ -132,7 +132,7 @@ class DebugHttpWorker extends HttpWorker {
           } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
-        });
+        }, onError: (e) => completer.complete(response.Response(status: -1, error: e)));
         break;
       case RequestMethod.patch:
         http.patch(url, headers: header, body: body).then((value) {
@@ -147,7 +147,7 @@ class DebugHttpWorker extends HttpWorker {
           } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
-        });
+        }, onError: (e) => completer.complete(response.Response(status: -1, error: e)));
         break;
       case RequestMethod.head:
         http.head(url, headers: header).then((value) {
@@ -162,7 +162,7 @@ class DebugHttpWorker extends HttpWorker {
           } finally {
             queueManager.removeFromQueueIf((p0) => p0[id] != null);
           }
-        });
+        }, onError: (e) => completer.complete(response.Response(status: -1, error: e)));
         break;
     }
     return completer;
