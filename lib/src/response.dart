@@ -23,9 +23,3 @@ class Cancellable<T> {
     onCancel?.call();
   }
 }
-
-class StatusCode {
-  static const int Cancelled = -1;
-  static const int OK = 200;
-  static const int NotFound = 404;
-}

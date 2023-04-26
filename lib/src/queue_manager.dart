@@ -1,7 +1,3 @@
-import 'dart:async';
-
-import 'package:unwired/src/response.dart';
-
 abstract class QueueManager<T> {
   final Set<T> _queue = Set<T>();
 
@@ -22,9 +18,7 @@ abstract class QueueManager<T> {
     _queue.removeWhere(filter);
   }
 
-  T createNewQueueObject() {
-    throw UnimplementedError();
-  }
+  T createNewQueueObject();
 }
 
 class RequestIdQueueManager extends QueueManager<int> {
@@ -44,12 +38,5 @@ class RequestIdQueueManager extends QueueManager<int> {
       id = _getUnusedId();
     }
     return id;
-  }
-}
-
-class CompleterQueueManager extends QueueManager<Map<int, Completer<Response>>> {
-  @override
-  Map<int, Completer<Response>> createNewQueueObject() {
-    throw UnsupportedError('Cant create new queue objects');
   }
 }
