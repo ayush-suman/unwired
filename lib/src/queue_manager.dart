@@ -1,3 +1,4 @@
+/// A class that manages a queue of objects.
 abstract class QueueManager<T> {
   final Set<T> _queue = Set<T>();
 
@@ -21,6 +22,8 @@ abstract class QueueManager<T> {
   T createNewQueueObject();
 }
 
+/// A [QueueManager] to store request ids. Used by [RequestHandler] to keep a
+/// track of ongoing requests.
 class RequestIdQueueManager extends QueueManager<int> {
   int _counter = 0;
 

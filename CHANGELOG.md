@@ -1,3 +1,6 @@
+## [0.7.0] - 7th Mat 2023.
+* Added doc comments.
+
 ## [0.6.0] - 26th April 2023.
 * First Complete Implementation of the new Unwired ⚡ library
 * Needs documentation
