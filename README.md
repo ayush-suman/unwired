@@ -28,6 +28,7 @@ Here is a curated list of how you can help:
 - Fix typos/grammar mistakes
 - Update the documentation / add examples
 - Implement new features by making a pull-request
+- Add test cases for existing features
 
 
 [Unwired] is stable and actively maintained.
