@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the RequestHandler class from the unwired library, for the Dart programming language.">
+  <title>RequestHandler class - unwired library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">unwired</a></li>
+    <li><a href="../unwired/unwired-library.html">unwired</a></li>
+    <li class="self-crumb">RequestHandler class</li>
+  </ol>
+  <div class="self-name">RequestHandler</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-class">RequestHandler</span> class 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+</h1></div>
+
+    
+
+
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+
+    <dl class="constructor-summary-list">
+        <dt id="RequestHandler" class="callable">
+          <span class="name"><a href="../unwired/RequestHandler/RequestHandler.html">RequestHandler</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+    </dl>
+  </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="authManager" class="property">
+  <span class="name"><a href="../unwired/RequestHandler/authManager.html">authManager</a></span>
+  <span class="signature">&#8592; <a href="../unwired/AuthManager-class.html">AuthManager</a></span> 
+
+</dt>
+<dd>
+  <a href="../unwired/AuthManager-class.html">AuthManager</a> is used to store token or manage the state of authentication
+for an application.
+  <div class="features">write-only</div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features">read-only, inherited</div>
+
+</dd>
+
+        <dt id="isAuthenticated" class="property">
+  <span class="name"><a href="../unwired/RequestHandler/isAuthenticated.html">isAuthenticated</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-core/bool-class.html">bool</a></span> 
+
+</dt>
+<dd>
+  Returns the authentication state of the application.
+  <div class="features">read-only</div>
+
+</dd>
+
+        <dt id="requestQueueManager" class="property">
+  <span class="name"><a href="../unwired/RequestHandler/requestQueueManager.html">requestQueueManager</a></span>
+  <span class="signature">&#8592; <a href="../unwired/QueueManager-class.html">QueueManager</a></span> 
+
+</dt>
+<dd>
+  <a href="../unwired/QueueManager-class.html">QueueManager</a> contains the strategy used to store the ongoing requests'
+meta data. This can be used to limit the maximum number of ongoing
+requests or to implement your own logic for managing the queue
+  <div class="features">write-only</div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-core/Type-class.html">Type</a></span> 
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features">read-only, inherited</div>
+
+</dd>
+
+        <dt id="worker" class="property">
+  <span class="name"><a href="../unwired/RequestHandler/worker.html">worker</a></span>
+  <span class="signature">&#8592; <a href="../unwired/HttpWorker-class.html">HttpWorker</a></span> 
+
+</dt>
+<dd>
+  <a href="../unwired/HttpWorker-class.html">HttpWorker</a> does the job of processing requests.
+It can be used to process requests on separate
+<a href="https://www.youtube.com/watch?v=vl_AaCgudcY">Isolate</a>
+or a pool of Isolates
+or for debugging and testing
+  <div class="features">write-only</div>
+
+</dd>
+
+      </dl>
+    </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="authenticate" class="callable">
+  <span class="name"><a href="../unwired/RequestHandler/authenticate.html">authenticate</a></span><span class="signature">(<wbr><span class="parameter" id="authenticate-param-token"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">token</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-async/Future-class.html">Future</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Stores the auth object, such as a JWT Token String,
+and updates the authentication state <a href="../unwired/AuthManager/isAuthenticated.html">AuthManager.isAuthenticated</a> to <code>true</code>.
+It does not assume anything about the auth object, and
+therefore can be used to store any kind of auth object.
+Make sure to set the <a href="../unwired/RequestHandler/authManager.html">authManager</a> accordingly to store the
+kind of object you want to use.
+  
+
+</dd>
+
+        <dt id="get" class="callable">
+  <span class="name"><a href="../unwired/RequestHandler/get.html">get</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="get-param-url">{<span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span> <span class="parameter-name">url</span>, </span><span class="parameter" id="get-param-params"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">params</span>, </span><span class="parameter" id="get-param-header"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">header</span>, </span><span class="parameter" id="get-param-auth"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">auth</span> = <span class="default-value">false</span>, </span><span class="parameter" id="get-param-parser"><span class="type-annotation"><a href="../unwired/Parser-class.html">Parser</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span>?</span> <span class="parameter-name">parser</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="../unwired/Cancellable-class.html">Cancellable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Function to make a GET network request
+  
+
+</dd>
+
+        <dt id="initialise" class="callable">
+  <span class="name"><a href="../unwired/RequestHandler/initialise.html">initialise</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-async/Future-class.html">Future</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  This function should be called before making any requests.
+It initialises the <a href="../unwired/AuthManager-class.html">AuthManager</a> and <a href="../unwired/HttpWorker-class.html">HttpWorker</a>.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a non-existent method or property is accessed.
+  <div class="features">inherited</div>
+
+</dd>
+
+        <dt id="post" class="callable">
+  <span class="name"><a href="../unwired/RequestHandler/post.html">post</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="post-param-url">{<span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span> <span class="parameter-name">url</span>, </span><span class="parameter" id="post-param-params"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">params</span>, </span><span class="parameter" id="post-param-header"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">header</span>, </span><span class="parameter" id="post-param-body"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object-class.html">Object</a>?</span> <span class="parameter-name">body</span>, </span><span class="parameter" id="post-param-auth"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">auth</span> = <span class="default-value">false</span>, </span><span class="parameter" id="post-param-parser"><span class="type-annotation"><a href="../unwired/Parser-class.html">Parser</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span>?</span> <span class="parameter-name">parser</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="../unwired/Cancellable-class.html">Cancellable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Function to make a POST network request
+  
+
+</dd>
+
+        <dt id="request" class="callable">
+  <span class="name"><a href="../unwired/RequestHandler/request.html">request</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="request-param-method">{<span class="type-annotation"><a href="../unwired/RequestMethod.html">RequestMethod</a></span> <span class="parameter-name">method</span> = <span class="default-value">RequestMethod.get</span>, </span><span class="parameter" id="request-param-url"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span> <span class="parameter-name">url</span>, </span><span class="parameter" id="request-param-params"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">params</span>, </span><span class="parameter" id="request-param-header"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">header</span>, </span><span class="parameter" id="request-param-body"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object-class.html">Object</a>?</span> <span class="parameter-name">body</span>, </span><span class="parameter" id="request-param-auth"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">auth</span> = <span class="default-value">false</span>, </span><span class="parameter" id="request-param-parser"><span class="type-annotation"><a href="../unwired/Parser-class.html">Parser</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span>?</span> <span class="parameter-name">parser</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="../unwired/Cancellable-class.html">Cancellable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Function to make a network request and returns a <a href="../unwired/Cancellable-class.html">Cancellable</a>. The
+<a href="../unwired/Cancellable-class.html">Cancellable</a> contains the <a href="https://api.dart.dev/stable/2.17.6/dart-async/Future-class.html">Future</a> of the <a href="../unwired/Response-class.html">Response</a> of the request, and
+a <a href="../unwired/Cancellable/cancel.html">Cancellable.cancel</a> method to cancel the ongoing request before it completes.
+  
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features">inherited</div>
+
+</dd>
+
+        <dt id="unauthenticate" class="callable">
+  <span class="name"><a href="../unwired/RequestHandler/unauthenticate.html">unauthenticate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-async/Future-class.html">Future</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Removes the auth object and updates the authentication state
+<a href="../unwired/AuthManager/isAuthenticated.html">AuthManager.isAuthenticated</a> to <code>false</code>.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/2.17.6/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features">inherited</div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">unwired</a></li>
+  <li><a href="../unwired/unwired-library.html">unwired</a></li>
+  <li class="self-crumb">RequestHandler class</li>
+</ol>
+
+
+    <h5>unwired library</h5>
+    <ol>
+  <li class="section-title"><a href="../unwired/unwired-library.html#classes">Classes</a></li>
+  <li><a href="../unwired/AuthManager-class.html">AuthManager</a></li>
+  <li><a href="../unwired/Cancellable-class.html">Cancellable</a></li>
+  <li><a href="../unwired/DebugHttpWorker-class.html">DebugHttpWorker</a></li>
+  <li><a href="../unwired/HttpWorker-class.html">HttpWorker</a></li>
+  <li><a href="../unwired/NativeHttpWorker-class.html">NativeHttpWorker</a></li>
+  <li><a href="../unwired/Parser-class.html">Parser</a></li>
+  <li><a href="../unwired/QueueManager-class.html">QueueManager</a></li>
+  <li><a href="../unwired/RequestCompleterStoreManager-class.html">RequestCompleterStoreManager</a></li>
+  <li><a href="../unwired/RequestHandler-class.html">RequestHandler</a></li>
+  <li><a href="../unwired/RequestIdQueueManager-class.html">RequestIdQueueManager</a></li>
+  <li><a href="../unwired/RequestInfoStoreManager-class.html">RequestInfoStoreManager</a></li>
+  <li><a href="../unwired/Response-class.html">Response</a></li>
+  <li><a href="../unwired/StoreManager-class.html">StoreManager</a></li>
+  <li><a href="../unwired/TokenAuthManager-class.html">TokenAuthManager</a></li>
+  <li><a href="../unwired/WebHttpWorker-class.html">WebHttpWorker</a></li>
+
+  <li class="section-title"><a href="../unwired/unwired-library.html#extensions">Extensions</a></li>
+  <li><a href="../unwired/Str.html">Str</a></li>
+
+
+
+
+
+  <li class="section-title"><a href="../unwired/unwired-library.html#enums">Enums</a></li>
+  <li><a href="../unwired/RequestMethod.html">RequestMethod</a></li>
+
+
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <ol>
+
+        <li class="section-title"><a href="../unwired/RequestHandler-class.html#constructors">Constructors</a></li>
+          <li><a href="../unwired/RequestHandler/RequestHandler.html">RequestHandler</a></li>
+
+
+    <li class="section-title">
+      <a href="../unwired/RequestHandler-class.html#instance-properties">Properties</a>
+    </li>
+    <li><a href="../unwired/RequestHandler/authManager.html">authManager</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li><a href="../unwired/RequestHandler/isAuthenticated.html">isAuthenticated</a></li>
+    <li><a href="../unwired/RequestHandler/requestQueueManager.html">requestQueueManager</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    <li><a href="../unwired/RequestHandler/worker.html">worker</a></li>
+
+    <li class="section-title"><a href="../unwired/RequestHandler-class.html#instance-methods">Methods</a></li>
+    <li><a href="../unwired/RequestHandler/authenticate.html">authenticate</a></li>
+    <li><a href="../unwired/RequestHandler/get.html">get</a></li>
+    <li><a href="../unwired/RequestHandler/initialise.html">initialise</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../unwired/RequestHandler/post.html">post</a></li>
+    <li><a href="../unwired/RequestHandler/request.html">request</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/toString.html">toString</a></li>
+    <li><a href="../unwired/RequestHandler/unauthenticate.html">unauthenticate</a></li>
+
+    <li class="section-title inherited"><a href="../unwired/RequestHandler-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    unwired
+      0.7.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

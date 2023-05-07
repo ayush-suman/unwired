@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the init method from the NativeHttpWorker class, for the Dart programming language.">
+  <title>init method - NativeHttpWorker class - unwired library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">unwired</a></li>
+    <li><a href="../../unwired/unwired-library.html">unwired</a></li>
+    <li><a href="../../unwired/NativeHttpWorker-class.html">NativeHttpWorker</a></li>
+    <li class="self-crumb">init method</li>
+  </ol>
+  <div class="self-name">init</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">init</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<div>
+  <ol class="annotation-list">
+    <li>@<a href="https://api.dart.dev/stable/2.17.6/dart-core/override-constant.html">override</a></li>
+  </ol>
+</div>
+
+<span class="returntype"><a href="https://api.dart.dev/stable/2.17.6/dart-async/Future-class.html">Future</a></span>
+<span class="name ">init</span>(<wbr>)
+
+      <div class="features">override</div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>This method is called before any requests are processed. This can be used
+to complete any initialisation needed before the worker can call
+<a href="../../unwired/NativeHttpWorker/processRequest.html">processRequest</a>.</p>
+<p>For example, if you are using
+<a href="https://www.youtube.com/watch?v=vl_AaCgudcY">Isolate</a>s to call requests,
+spawn the isolates in this function.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Future init() async {
+  _isolate = await Isolate.spawn&lt;SendPort&gt;((sendPort) {
+    final receivePort = ReceivePort();
+    sendPort.send(receivePort.sendPort);
+    receivePort.listen((message) {
+      final data = (message as Map&lt;String, Object?&gt;);
+
+      final Object id = data[ID]!;
+      final RequestMethod method = data[METHOD]! as RequestMethod;
+      final Uri url = data[URL]! as Uri;
+      final Map&lt;String, String&gt;? header = data[HEADER] as Map&lt;String, String&gt;?;
+      final body = data[BODY];
+      final Parser? parser = data[PARSER] as Parser?;
+
+      switch (method) {
+        case RequestMethod.get:
+          http.get(url, headers: header).then((value) {
+            final json = jsonDecode(value.body);
+            try {
+              dynamic data = parser?.parse(json);
+              sendPort.send({
+                ID: id,
+                RESPONSE: Response(
+                    status: value.statusCode, data: data ?? json)
+              });
+            } catch (e) {
+              sendPort.send({
+                ID: id,
+                RESPONSE:
+                Response(status: value.statusCode, error: e)
+              });
+            }
+          },
+              onError: (e) =&gt; sendPort.send({
+                ID: id,
+                RESPONSE: (Response(status: -1, error: e))
+              }));
+          break;
+        case RequestMethod.post:
+          http.post(url, headers: header, body: body).then((value) {
+            final json = jsonDecode(value.body);
+            try {
+              dynamic data = parser?.parse(json);
+              sendPort.send({
+                ID: id,
+                RESPONSE: Response(
+                    status: value.statusCode, data: data ?? json)
+              });
+            } catch (e) {
+              sendPort.send({
+                ID: id,
+                RESPONSE:
+                Response(status: value.statusCode, error: e)
+              });
+            }
+          },
+              onError: (e) =&gt; sendPort.send({
+                ID: id,
+                RESPONSE: (Response(status: -1, error: e))
+              }));
+          break;
+        case RequestMethod.put:
+          http.put(url, headers: header, body: body).then((value) {
+            final json = jsonDecode(value.body);
+            try {
+              dynamic data = parser?.parse(json);
+              sendPort.send({
+                ID: id,
+                RESPONSE: Response(
+                    status: value.statusCode, data: data ?? json)
+              });
+            } catch (e) {
+              sendPort.send({
+                ID: id,
+                RESPONSE:
+                Response(status: value.statusCode, error: e)
+              });
+            }
+          },
+              onError: (e) =&gt; sendPort.send({
+                ID: id,
+                RESPONSE: (Response(status: -1, error: e))
+              }));
+          break;
+        case RequestMethod.delete:
+          http.delete(url, headers: header, body: body).then((value) {
+            final json = jsonDecode(value.body);
+            try {
+              dynamic data = parser?.parse(json);
+              sendPort.send({
+                ID: id,
+                RESPONSE: Response(
+                    status: value.statusCode, data: data ?? json)
+              });
+            } catch (e) {
+              sendPort.send({
+                ID: id,
+                RESPONSE:
+                Response(status: value.statusCode, error: e)
+              });
+            }
+          },
+              onError: (e) =&gt; sendPort.send({
+                ID: id,
+                RESPONSE: (Response(status: -1, error: e))
+              }));
+          break;
+        case RequestMethod.patch:
+          http.patch(url, headers: header, body: body).then((value) {
+            final json = jsonDecode(value.body);
+            try {
+              dynamic data = parser?.parse(json);
+              sendPort.send({
+                ID: id,
+                RESPONSE: Response(
+                    status: value.statusCode, data: data ?? json)
+              });
+            } catch (e) {
+              sendPort.send({
+                ID: id,
+                RESPONSE:
+                Response(status: value.statusCode, error: e)
+              });
+            }
+          },
+              onError: (e) =&gt; sendPort.send({
+                ID: id,
+                RESPONSE: (Response(status: -1, error: e))
+              }));
+          break;
+        case RequestMethod.head:
+          http.head(url, headers: header).then((value) {
+            final json = jsonDecode(value.body);
+            try {
+              dynamic data = parser?.parse(json);
+              sendPort.send({
+                ID: id,
+                RESPONSE: Response(
+                    status: value.statusCode, data: data ?? json)
+              });
+            } catch (e) {
+              sendPort.send({
+                ID: id,
+                RESPONSE:
+                Response(status: value.statusCode, error: e)
+              });
+            }
+          },
+              onError: (e) =&gt; sendPort.send({
+                ID: id,
+                RESPONSE: (Response(status: -1, error: e))
+              }));
+          break;
+      }
+    });
+  }, _receivePort.sendPort);
+
+  _sendPort = await _receivePort.first;
+
+  _receivePort.listen((data) {
+    final dataMap = data as Map&lt;String, Object?&gt;;
+    final Object id = dataMap[ID]!;
+    final completer = _storeManager.getRequestCompleter(id);
+    if (!(completer?.isCompleted ?? true))
+      completer?.complete(dataMap[RESPONSE]);
+    _storeManager.removeFromStore(id);
+  });
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">unwired</a></li>
+  <li><a href="../../unwired/unwired-library.html">unwired</a></li>
+  <li><a href="../../unwired/NativeHttpWorker-class.html">NativeHttpWorker</a></li>
+  <li class="self-crumb">init method</li>
+</ol>
+
+
+    <h5>NativeHttpWorker class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../unwired/NativeHttpWorker-class.html#constructors">Constructors</a></li>
+          <li><a href="../../unwired/NativeHttpWorker/NativeHttpWorker.html">NativeHttpWorker</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../../unwired/NativeHttpWorker-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title"><a href="../../unwired/NativeHttpWorker-class.html#instance-methods">Methods</a></li>
+    <li><a href="../../unwired/NativeHttpWorker/destroy.html">destroy</a></li>
+    <li><a href="../../unwired/NativeHttpWorker/init.html">init</a></li>
+    <li><a href="../../unwired/NativeHttpWorker/killRequest.html">killRequest</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../../unwired/NativeHttpWorker/processRequest.html">processRequest</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../unwired/NativeHttpWorker-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.dart.dev/stable/2.17.6/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    unwired
+      0.7.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+
