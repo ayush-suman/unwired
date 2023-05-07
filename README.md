@@ -10,12 +10,25 @@
 
 Unwired is a Dart HTTP client library for handling multi-threaded disposable network calls, data parsing and authentication in applications.
 
-### Documentation will be updated soon.
+Documentation will be updated soon.
 
 ## FAQs
 ### Is it safe to use in production?
 
 Yes.
+
+## Contributing
+
+Contributions are welcomed!
+
+Here is a curated list of how you can help:
+
+- Report bugs and scenarios that are difficult to implement
+- Report parts of the documentation that are unclear
+- Fix typos/grammar mistakes
+- Update the documentation / add examples
+- Implement new features by making a pull-request
+
 
 [Unwired] is stable and actively maintained.
 
