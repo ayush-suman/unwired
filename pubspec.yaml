@@ -4,7 +4,7 @@ version: 0.7.0
 homepage: https://github.com/Ayush-Suman/unwired
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.17.0 <3.7.12"
 
 dependencies:
   flutter:
@@ -16,3 +16,4 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: ^1.16.9

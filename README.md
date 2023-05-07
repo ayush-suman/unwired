@@ -4,8 +4,6 @@
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 </p>
 
----
-
 # Unwired ⚡
 
 Unwired is a Dart HTTP client library for handling multi-threaded disposable network calls, data parsing and authentication in applications.
