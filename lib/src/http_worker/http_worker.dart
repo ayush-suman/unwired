@@ -4,6 +4,11 @@ import 'package:unwired/src/parser.dart';
 import 'package:unwired/src/request_method.dart';
 import 'package:unwired/src/response.dart';
 
+export 'package:unwired/src/http_worker/debug_http_worker.dart';
+export 'package:unwired/src/http_worker/stub_http_worker.dart'
+if (dart.library.io) 'package:unwired/src/http_worker/native_http_worker.dart'
+if (dart.library.html) 'package:unwired/src/http_worker/web_http_worker.dart';
+
 /// This is the base class for all the workers that process the requests.
 /// This can be extended to create your own implementation for processing
 /// requests.

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:unwired/src/auth_manager/auth_manager.dart';
 import 'package:unwired/src/http_worker/http_worker.dart';
-import 'package:unwired/src/http_worker/debug_http_worker.dart';
 import 'package:unwired/src/parser.dart';
 import 'package:unwired/src/queue_manager.dart';
 import 'package:unwired/src/request_method.dart';
