@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:unwired/src/auth_manager/auth_manager.dart';
 import 'package:unwired/src/http_worker/http_worker.dart';
 import 'package:unwired/src/http_worker/debug_http_worker.dart';
@@ -44,7 +43,7 @@ class RequestHandler {
       /// [RequestIdQueueManager] is the default value of the [requestQueueManager].
       QueueManager? requestQueueManager}) {
     _authManager =
-        authManager ?? TokenAuthManager(secureStorage: FlutterSecureStorage());
+        authManager;
     _worker = worker ?? DebugHttpWorker();
     _requestQueueManager = requestQueueManager ?? RequestIdQueueManager();
   }
@@ -58,7 +57,7 @@ class RequestHandler {
   /// In general, the best place to call this function would be before
   /// The `runApp` method in the [main] function.
   Future initialise() async {
-    return Future.wait([_authManager.synchronize(), _worker.init()]);
+    return Future.wait([if (_authManager!=null) _authManager!.synchronize(), _worker.init()]);
   }
 
   /// [QueueManager] contains the strategy used to store the ongoing requests'
@@ -82,7 +81,7 @@ class RequestHandler {
   /// One can create their own [AuthManager] to create
   /// their own implementation of managing the authentication or to not manage
   /// authentication at all
-  late final AuthManager _authManager;
+  late final AuthManager? _authManager;
 
   /// Function to make a network request and returns a [Cancellable]. The
   /// [Cancellable] contains the [Future] of the [Response] of the request, and
@@ -110,10 +109,10 @@ class RequestHandler {
     Uri uri = Uri.parse(url);
 
     // Add auth token if auth is true
-    if (auth)
+    if (auth && _authManager!=null)
       header == null
-          ? header = {'Authorization': _authManager.parsedAuthObject}
-          : header.addAll({'Authorization': _authManager.parsedAuthObject});
+          ? header = {'Authorization': _authManager!.parsedAuthObject}
+          : header.addAll({'Authorization': _authManager!.parsedAuthObject});
 
     Completer<Response<T>> completer =
         _worker.processRequest<T>(id, method, uri, header, body, parser);
@@ -165,18 +164,21 @@ class RequestHandler {
   /// By default [authManager] uses [TokenAuthManager] which stores
   /// a [String] type object. This is suitable for most cases.
   Future authenticate(Object token) async {
-    await _authManager.authenticate(token);
+    await _authManager?.authenticate(token);
   }
 
   /// Removes the auth object and updates the authentication state
   /// [AuthManager.isAuthenticated] to `false`.
   Future unauthenticate() async {
-    await _authManager.unauthenticate();
+    await _authManager?.unauthenticate();
   }
 
   /// Returns the authentication state of the application.
   bool get isAuthenticated {
-    return _authManager.isAuthenticated;
+    if (_authManager!=null) {
+      return _authManager!.isAuthenticated;
+    }
+    throw Exception('AuthManager is not set. Please set the initialise AuthManager before using this method');
   }
 
   _killRequest(Object id) {
