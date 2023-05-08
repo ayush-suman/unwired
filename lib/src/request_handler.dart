@@ -52,7 +52,7 @@ class RequestHandler {
   /// to manage the authentication state and credentials of the application.
   ///
   /// In general, the best place to call this function would be before
-  /// The `runApp` method in the [main] function.
+  /// The `runApp` method in the `main` function.
   Future initialise() async {
     return Future.wait([
       if (_authManager != null) _authManager!.synchronize(),
@@ -160,9 +160,6 @@ class RequestHandler {
   /// therefore can be used to store any kind of auth object.
   /// Make sure to set the [authManager] accordingly to store the
   /// kind of object you want to use.
-  ///
-  /// By default [authManager] uses [TokenAuthManager] which stores
-  /// a [String] type object. This is suitable for most cases.
   Future authenticate(Object token) async {
     if (_authManager != null) {
       await _authManager!.authenticate(token);
