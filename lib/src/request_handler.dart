@@ -8,12 +8,10 @@ import 'package:unwired/src/queue_manager.dart';
 import 'package:unwired/src/request_method.dart';
 import 'package:unwired/src/response.dart';
 
-
 /// This is used to create HTTP requests.
 class RequestHandler {
   RequestHandler(
       {
-
       /// [AuthManager] is used to store token or manage the state of authentication
       /// for an application.
       ///
@@ -42,8 +40,7 @@ class RequestHandler {
       ///
       /// [RequestIdQueueManager] is the default value of the [requestQueueManager].
       QueueManager? requestQueueManager}) {
-    _authManager =
-        authManager;
+    _authManager = authManager;
     _worker = worker ?? DebugHttpWorker();
     _requestQueueManager = requestQueueManager ?? RequestIdQueueManager();
   }
@@ -57,7 +54,10 @@ class RequestHandler {
   /// In general, the best place to call this function would be before
   /// The `runApp` method in the [main] function.
   Future initialise() async {
-    return Future.wait([if (_authManager!=null) _authManager!.synchronize(), _worker.init()]);
+    return Future.wait([
+      if (_authManager != null) _authManager!.synchronize(),
+      _worker.init()
+    ]);
   }
 
   /// [QueueManager] contains the strategy used to store the ongoing requests'
@@ -109,7 +109,7 @@ class RequestHandler {
     Uri uri = Uri.parse(url);
 
     // Add auth token if auth is true
-    if (auth && _authManager!=null)
+    if (auth && _authManager != null)
       header == null
           ? header = {'Authorization': _authManager!.parsedAuthObject}
           : header.addAll({'Authorization': _authManager!.parsedAuthObject});
@@ -164,21 +164,32 @@ class RequestHandler {
   /// By default [authManager] uses [TokenAuthManager] which stores
   /// a [String] type object. This is suitable for most cases.
   Future authenticate(Object token) async {
-    await _authManager?.authenticate(token);
+    if (_authManager != null) {
+      await _authManager!.authenticate(token);
+    } else {
+      throw UnimplementedError(
+          'AuthManager is not set. Please set the initialise AuthManager before using this method');
+    }
   }
 
   /// Removes the auth object and updates the authentication state
   /// [AuthManager.isAuthenticated] to `false`.
   Future unauthenticate() async {
-    await _authManager?.unauthenticate();
+    if (_authManager != null) {
+      await _authManager?.unauthenticate();
+    } else {
+      throw UnimplementedError(
+          'AuthManager is not set. Please set the initialise AuthManager before using this method');
+    }
   }
 
   /// Returns the authentication state of the application.
   bool get isAuthenticated {
-    if (_authManager!=null) {
+    if (_authManager != null) {
       return _authManager!.isAuthenticated;
     }
-    throw Exception('AuthManager is not set. Please set the initialise AuthManager before using this method');
+    throw Exception(
+        'AuthManager is not set. Please set the initialise AuthManager before using this method');
   }
 
   _killRequest(Object id) {

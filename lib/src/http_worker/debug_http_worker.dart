@@ -53,8 +53,9 @@ class DebugHttpWorker extends HttpWorker {
             }
           }
         }, onError: (e) {
-          if (!completer.isCompleted)
+          if (!completer.isCompleted) {
             completer.complete(Response(status: -1, error: e));
+          }
         });
         break;
       case RequestMethod.post:
@@ -76,8 +77,9 @@ class DebugHttpWorker extends HttpWorker {
             }
           }
         }, onError: (e) {
-          if (!completer.isCompleted)
+          if (!completer.isCompleted) {
             completer.complete(Response(status: -1, error: e));
+          }
         });
         break;
       case RequestMethod.put:
@@ -99,8 +101,9 @@ class DebugHttpWorker extends HttpWorker {
             }
           }
         }, onError: (e) {
-          if (!completer.isCompleted)
+          if (!completer.isCompleted) {
             completer.complete(Response(status: -1, error: e));
+          }
         });
         break;
       case RequestMethod.delete:
@@ -122,8 +125,9 @@ class DebugHttpWorker extends HttpWorker {
             }
           }
         }, onError: (e) {
-          if (!completer.isCompleted)
+          if (!completer.isCompleted) {
             completer.complete(Response(status: -1, error: e));
+          }
         });
         break;
       case RequestMethod.patch:
@@ -145,8 +149,9 @@ class DebugHttpWorker extends HttpWorker {
             }
           }
         }, onError: (e) {
-          if (!completer.isCompleted)
+          if (!completer.isCompleted) {
             completer.complete(Response(status: -1, error: e));
+          }
         });
         break;
       case RequestMethod.head:
@@ -168,8 +173,9 @@ class DebugHttpWorker extends HttpWorker {
             }
           }
         }, onError: (e) {
-          if (!completer.isCompleted)
+          if (!completer.isCompleted) {
             completer.complete(Response(status: -1, error: e));
+          }
         });
         break;
     }
