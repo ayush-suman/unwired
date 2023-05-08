@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'http_worker.dart';
-import '../parser.dart';
-import '../request_method.dart';
-import '../response.dart';
-import '../store_manager.dart';
-import '../constants.dart';
+import 'package:unwired/src/http_worker/http_worker.dart';
+import 'package:unwired/src/parser.dart';
+import 'package:unwired/src/request_method.dart';
+import 'package:unwired/src/response.dart';
+import 'package:unwired/src/store_manager.dart';
+import 'package:unwired/src/constants.dart';
 import 'package:http/http.dart' as http;
 
 /// This is an implementation of [HttpWorker] that processes
