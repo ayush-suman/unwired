@@ -9,7 +9,9 @@ import 'dart:async';
 /// If the request gets cancelled by the user, the [data] and [error] will
 /// be null, and the [status] will be `-1`.
 class Response<D> {
-  Response({required this.status, this.data, this.error, this.isCancelled=false}): hasError = error!=null;
+  Response(
+      {required this.status, this.data, this.error, this.isCancelled = false})
+      : hasError = error != null;
 
   final int status;
   final D? data;

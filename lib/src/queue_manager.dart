@@ -2,7 +2,7 @@
 abstract class QueueManager<T> {
   final Set<T> _queue = Set<T>();
 
-  bool addToQueue(T element){
+  bool addToQueue(T element) {
     return _queue.add(element);
   }
 
@@ -37,7 +37,7 @@ class RequestIdQueueManager extends QueueManager<int> {
   @override
   int createNewQueueObject() {
     int id = _getUnusedId();
-    while(!addToQueue(id)) {
+    while (!addToQueue(id)) {
       id = _getUnusedId();
     }
     return id;

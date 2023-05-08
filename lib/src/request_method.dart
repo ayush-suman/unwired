@@ -1,12 +1,5 @@
-enum RequestMethod {
- get,
- post,
- put,
- delete,
- patch,
- head
-}
+enum RequestMethod { get, post, put, delete, patch, head }
 
 extension Str on RequestMethod {
- String get string => name.toUpperCase();
+  String get string => name.toUpperCase();
 }

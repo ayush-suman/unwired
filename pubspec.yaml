@@ -1,19 +1,15 @@
 name: unwired
 description: Unwired is a client library for handling (authenticated) multi-threaded disposable network calls, data parsing and authentication in applications.
-version: 0.7.0
+version: 0.7.1
 homepage: https://github.com/Ayush-Suman/unwired
 
 environment:
   sdk: ">=2.17.0 <3.7.12"
 
 dependencies:
-  flutter:
-    sdk: flutter
   http: ^0.13.5
-  flutter_secure_storage: ^7.0.1
+  flutter_secure_storage: ^8.0.0
 
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   test: ^1.16.9

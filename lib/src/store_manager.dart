@@ -9,6 +9,8 @@ import 'package:unwired/src/request_method.dart';
 ///
 /// Extend this class to create your own [StoreManager]
 abstract class StoreManager<K, V> {
+  StoreManager();
+
   final Map<K, V> _store = Map<K, V>();
 
   /// Adds an element to the store
@@ -37,14 +39,10 @@ abstract class StoreManager<K, V> {
 /// A [StoreManager] to store request [Completer]s with the request id
 /// as the key and [Completer] of the request as the value.
 class RequestCompleterStoreManager extends StoreManager<Object, Completer> {
-
   /// Stores the request information in the store
   void storeCompleter<T>(
-      {required Object requestId,
-      required Completer<T> completer}) {
-    addToStore({
-      requestId: completer
-    });
+      {required Object requestId, required Completer<T> completer}) {
+    addToStore({requestId: completer});
   }
 
   /// Returns the [Completer] of the request with [requestId]
@@ -60,8 +58,8 @@ class RequestCompleterStoreManager extends StoreManager<Object, Completer> {
 
 /// A [StoreManager] to store request debug info with the request id
 /// as the key and a [Map] of request information as the value.
-class RequestInfoStoreManager extends StoreManager<Object, Map<String, Object?>> {
-
+class RequestInfoStoreManager
+    extends StoreManager<Object, Map<String, Object?>> {
   /// Stores the request information in the store
   void storeRequestInfo<T>(
       {required Object requestId,
