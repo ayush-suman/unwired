@@ -4,7 +4,7 @@ import 'dart:async';
 /// credentials of the application.
 ///
 /// Extend this class to implement your own authentication logic. You can store
-/// the [authObject] in any db of your choice, in a [FlutterSecureStorage], or
+/// the [authObject] in any db of your choice, in a [FlutterSecureStorage](https://pub.dev/packages/flutter_secure_storage), or
 /// in memory if you don't want to persist it.
 abstract class AuthManager<T> {
   const AuthManager();

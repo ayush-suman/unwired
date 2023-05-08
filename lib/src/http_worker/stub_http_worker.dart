@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'http_worker.dart';
-import '../parser.dart';
-import '../request_method.dart';
-import '../response.dart';
+import 'package:unwired/src/http_worker/http_worker.dart';
+import 'package:unwired/src/parser.dart';
+import 'package:unwired/src/request_method.dart';
+import 'package:unwired/src/response.dart';
 
 class DefaultHttpWorker extends HttpWorker {
   @override

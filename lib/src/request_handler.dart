@@ -12,6 +12,7 @@ import 'package:unwired/src/response.dart';
 class RequestHandler {
   RequestHandler(
       {
+
       /// [AuthManager] is used to store token or manage the state of authentication
       /// for an application.
       ///
@@ -19,9 +20,8 @@ class RequestHandler {
       /// their own implementation of managing the authentication or to not manage
       /// authentication at all.
       ///
-      /// [TokenAuthManager] is the default value of the [authManager]. This value
-      /// can be set to null only if you never use auth parameter in the [request]
-      /// method.
+      /// This value can be set to null only if you never use auth parameter in
+      /// the [request] method.
       AuthManager? authManager,
 
       /// [HttpWorker] does the job of processing requests.
