@@ -1,4 +1,7 @@
-## [0.7.0] - 7th Mat 2023.
+## [0.8.0] - 9th May 2023.
+* Native HTTP Worker Fixed
+
+## [0.7.0] - 7th May 2023.
 * Added doc comments.
 
 ## [0.6.0] - 26th April 2023.
