@@ -22,6 +22,178 @@ Fast and minimalistic Dart HTTP client library for
 - [x] Multithreaded Requests
 - [ ] Interceptors
 
+
+## Usage
+
+### Initialising
+
+In Unwired, requests are made using `RequestHandler()` object. However, before you can make any HTTP request, you should initialise the object. Initialising calls the `init()` functions of the `AuthManager` if you are using any, and the `HttpWorker` which processes your HTTP requests.
+
+```dart
+final requestHandler = RequestHandler(); // Debug Http Worker will be used since no Http Worker is passed in the constructor
+await requestHandler.initialise(); // Once the future completes, you can start making requests using this requestHandler object
+```
+
+### GET Request
+
+```dart
+final cancellable = requestHandler.get(
+        url: "https://api.nasa.gov/planetary/apod", 
+        params: {"api_key": "YOUR_API_KEY"}
+    );
+
+final response = await cancellable.response;
+```
+
+Or you can use the `request` method to make the request.
+
+```dart
+final cancellable = requestHandler.request(
+        method = RequestMethod.get,
+        url = "https://api.nava.gov/planetary/apod",
+        params = {"api_key", "YOUR_API_KEY"}
+    );
+```
+
+## POST Request
+
+POST request will be similar to the GET request. You can pass `body` to the method as well.
+
+```dart
+final cancellable = requestHandler.post(
+        url: "...",
+        body: ... // Body can be of any type
+    );
+
+final response = await cancellable.response;
+```
+
+Similar to the case with GET request, you can use `request` to make the POST request. `request` method can be used to call other HTTP requests such as DELETE, PUT, PATCH etc.
+
+## Cancelling Request
+
+Cancelling is as simple as calling `cancel` method on `Cancellable` object. This will cause the `Response` object to return immediately with `isCancelled` set to true.
+
+```dart
+cancellable.cancel();
+
+final response = await cancellable.response();
+
+print(response.isCancelled); // TRUE
+```
+
+
+## Data Parsing
+
+To parse a data in Unwired requests, you should create a `Parser` object that tells the library how to parse the data.
+
+```dart
+class APODParser extends Parser<APOD> {
+
+@override
+APOD parse(Object data) {
+    // Parse your data into your desired object (APOD in this case) here.
+    // Using generators like freezed for your data class will give you a nice function to parse the data from JSON.
+    // You can call that function here or throw if parsing fails. The error should be caught by the HTTP Worker 
+    // And packed into the Response object.
+    
+    return apod;
+}
+
+}
+```
+
+## Using Managed Auth
+
+Unwired supports managed authentication. You can create and use your own implementation of `AuthManager` class to manage the authentication in application and requests.
+
+```dart
+class TokenAuthManager extends AuthManager {
+  TokenAuthManager({required this.secureStorage}) {
+    secureStorage.read(key: _key).then((value) {
+      _token = value;
+      _completer.complete();
+    });
+  }
+
+  final FlutterSecureStorage secureStorage;
+
+  final Completer<void> _completer = Completer<void>();
+
+  Future synchronize() {
+    return _completer.future;
+  }
+
+  String _key = 'a239jakps';
+  set key(String k) {
+    _key = k;
+  }
+
+  String? _token;
+
+  @override
+  String? get authObject => _token;
+
+  Future _saveToken(String token) async {
+    await secureStorage.write(key: _key, value: token);
+    _token = token;
+  }
+
+  Future _deleteToken() async {
+    await secureStorage.delete(key: _key);
+    _token = null;
+  }
+
+  Future authenticate(dynamic token) async {
+    if (token is String) {
+      _saveToken(token);
+    } else {
+      throw UnsupportedError(
+          'Token of type ${token.runtimeType} is not supported');
+    }
+  }
+
+  Future unauthenticate() async {
+    await _deleteToken();
+  }
+
+  @override
+  bool get isAuthenticated => _token != null;
+
+  String Function(String? token) _tokenParser =
+      (token) => token != null ? 'Bearer $token' : '';
+
+  /// This function is used to parse the [authObject] to include any keyword
+  /// such as 'Bearer ' along with the [String] token in the `Authorization`
+  /// header of a request depending on the type of token.
+  set tokenParser(String Function(String? token) parser) {
+    _tokenParser = parser;
+  }
+
+  @override
+  String get parsedAuthObject => _tokenParser(_token);
+}
+```
+
+Pass your implementation of `AuthManager` to the `RequestHandler`.
+
+```dart
+final requestHandler = RequestHandler(authManager: TokenAuthManager());
+```
+
+Now you can access the functions like `authenticate` and `unauthenticate` to manage the auth state of your app.
+
+```dart
+final token = ... // Some request to get your token
+requestHandler.authenticate(token);
+```
+
+To make authenticated requests, simply set the `auth` argument of the `request` or `get` or `post` methods to true. This will automatically include the `parsedAuthObject` to the Authentication header of the request.
+
+```dart
+final cancellable = requestHandler.get(url: "...", auth: true);
+```
+
 ## FAQs
 ### Is it safe to use in production?
 

@@ -9,7 +9,6 @@ import 'package:unwired/src/response.dart';
 import 'package:unwired/src/store_manager.dart';
 import 'package:unwired/src/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:unwired/src/utils/async_utils.dart';
 
 /// This implementation of [HttpWorker] is used to handle http requests in a
 /// separate [Isolate](https://www.youtube.com/watch?v=vl_AaCgudcY). By default,
