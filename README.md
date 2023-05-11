@@ -4,7 +4,7 @@
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 </p>
 
-# Unwired ⚡
+# Unwired ![](https://em-content.zobj.net/source/animated-noto-color-emoji/356/high-voltage_26a1.gif)
 [![Pub](https://img.shields.io/pub/v/unwired.svg)](https://pub.dev/packages/unwired)
 
 Fast and minimalistic Dart HTTP client library for
