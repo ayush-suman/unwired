@@ -1,7 +1,7 @@
 name: Report a bug
 description: Report a feature not working as expected
 title: ""
-label: bug
+labels: bug
 assignees: 
   - Ayush-Suman
 body: 
@@ -12,44 +12,44 @@ body:
         - Before you file an issue, check to make sure someone hasn't opened a similar [issue](https://github.com/Ayush-Suman/unwired/issues).
         - Make sure to read through the [Contributing guide](https://github.com/Ayush-Suman/unwired/blob/main/CONTRIBUTING.md).
 
-      type: checkboxes
-      id: terms
-      attributes: 
-        label: Code of Conduct
-        description: This project has a code of conduct for all participants should follow.
-        options: 
-          - label: I have read and agree to the Unwired project's [Code of Conduct](https://github.com/Ayush-Suman/unwired/blob/main/CODE_OF_CONDUCT.md)
-            required: true
+  - type: checkboxes
+    id: terms
+    attributes: 
+      label: Code of Conduct
+      description: This project has a code of conduct for all participants should follow.
+      options: 
+        - label: I have read and agree to the Unwired project's [Code of Conduct](https://github.com/Ayush-Suman/unwired/blob/main/CODE_OF_CONDUCT.md)
+          required: true
 
-      type: textarea
-      attributes:
-        label: Bug Description
-        description: Keep it clear and concise. Inlcude screenshots if you would like.
-        value: |
-          Short and explicit description of the bug... 
-          Screenshot - ![DESCRIPTION](LINK.png)
-        render: bash
-      validations:
-        required: true
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: Keep it clear and concise. Inlcude screenshots if you would like.
+      value: |
+        Short and explicit description of the bug... 
+        Screenshot - ![DESCRIPTION](LINK.png)
+      render: bash
+    validations:
+      required: true
 
-      type: textarea
-      attributes:
-        label: Steps to Reproduce
-        description: If applicable, please include step by step process to reproduce the bug
-        value: |
-          1. Go to '...'
-          2. Click on '....'
-          3. Scroll down to '....'
-          4. See error
-        render: bash
-      validations:
-        required: false
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: If applicable, please include step by step process to reproduce the bug
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+      render: bash
+    validations:
+      required: false
 
-      type: textarea
-      attributes:
-        label: Expected Behaviour
-        description: Include expected behaviour if not clear from the bug description
-      validations:
-        required: false
+  - type: textarea
+    attributes:
+      label: Expected Behaviour
+      description: Include expected behaviour if not clear from the bug description
+    validations:
+      required: false
 
 
