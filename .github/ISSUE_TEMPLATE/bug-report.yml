@@ -1,35 +1,55 @@
-  1 ---
-  2 name: Report a bug
-  3 description: Report a feature not working as expected
-  4 title: ""
-  5 label: bug
-  6 assignees: 
-  7   - Ayush-Suman
-  8 body: 
-  9   - type: markdown
- 10     attributes: 
- 11       value: |
- 12         - For questions, ask in [Discussions](https://github.com/Ayush-Suman/unwired/discussions).
- 13         - Before you file an issue, check to make sure someone hasn't opened a similar [issue](https://github.com/Ayush-Suman/unwired/issues).
- 14         - Make sure to read through the [Contributing guide](https://github.com/Ayush-Suman/unwired/blob/main/CONTRIBUTING.md).
- 15 
- 16       type: checkboxes
- 17       id: terms
- 18       attributes: 
- 19         label: Code of Conduct
- 20         description: This project has a code of conduct for all participants should follow.
- 21         options: 
- 22           - label: I have read and agree to the Unwired project's [Code of Conduct](https://github.com/Ayush-Suman/unwired/blob/main/CODE_OF_CONDUCT.md)
- 23             required: true
- 24 
- 25 ---
- 26 
- 27 **Bug Description**
- 28 Keep it clear and concise.   
- 29 Inlcude screenshots if you would like.
- 30 
- 31 **Steps to reproduce**
- 32 Include the steps to reproduce if not clear from the description.
- 33 
- 34 **Expected Behaviour**
- 35 Describe how you would like it to work instead 
+name: Report a bug
+description: Report a feature not working as expected
+title: ""
+label: bug
+assignees: 
+  - Ayush-Suman
+body: 
+  - type: markdown
+    attributes: 
+      value: |
+        - For questions, ask in [Discussions](https://github.com/Ayush-Suman/unwired/discussions).
+        - Before you file an issue, check to make sure someone hasn't opened a similar [issue](https://github.com/Ayush-Suman/unwired/issues).
+        - Make sure to read through the [Contributing guide](https://github.com/Ayush-Suman/unwired/blob/main/CONTRIBUTING.md).
+
+      type: checkboxes
+      id: terms
+      attributes: 
+        label: Code of Conduct
+        description: This project has a code of conduct for all participants should follow.
+        options: 
+          - label: I have read and agree to the Unwired project's [Code of Conduct](https://github.com/Ayush-Suman/unwired/blob/main/CODE_OF_CONDUCT.md)
+            required: true
+
+      type: textarea
+      attributes:
+        label: Bug Description
+        description: Keep it clear and concise. Inlcude screenshots if you would like.
+        value: |
+          Short and explicit description of the bug... 
+          Screenshot - ![DESCRIPTION](LINK.png)
+        render: bash
+      validations:
+        required: true
+
+      type: textarea
+      attributes:
+        label: Steps to Reproduce
+        description: If applicable, please include step by step process to reproduce the bug
+        value: |
+          1. Go to '...'
+          2. Click on '....'
+          3. Scroll down to '....'
+          4. See error
+        render: bash
+      validations:
+        required: false
+
+      type: textarea
+      attributes:
+        label: Expected Behaviour
+        description: Include expected behaviour if not clear from the bug description
+      validations:
+        required: false
+
+
