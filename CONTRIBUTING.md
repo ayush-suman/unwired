@@ -16,10 +16,10 @@ While creating a blank issue, make sure to add relevant labels to your issue to 
 
 ### Issue labels
 
-- bug : use this label for filing a bug report
-- feature : use this label for requesting a new feature
-- doc : use this label for requesting an update in the README or documentation
-- test : use this label to request an update in the test cases
+- `bug` : use this label for filing a bug report
+- `feature` : use this label for requesting a new feature
+- `doc` : use this label for requesting an update in the README or documentation
+- `test` : use this label to request an update in the test cases
 
 ### Solving an issue
 
