@@ -34,7 +34,7 @@ final requestHandler = RequestHandler(); // Debug Http Worker will be used since
 await requestHandler.initialise(); // Once the future completes, you can start making requests using this requestHandler object
 ```
 
-### GET Request
+### Get Request
 
 ```dart
 final cancellable = requestHandler.get(
@@ -55,7 +55,7 @@ final cancellable = requestHandler.request(
     );
 ```
 
-## POST Request
+### Post Request
 
 POST request will be similar to the GET request. You can pass `body` to the method as well.
 
@@ -70,7 +70,7 @@ final response = await cancellable.response;
 
 Similar to the case with GET request, you can use `request` to make the POST request. `request` method can be used to call other HTTP requests such as DELETE, PUT, PATCH etc.
 
-## Cancelling Request
+### Cancelling Request
 
 Cancelling is as simple as calling `cancel` method on `Cancellable` object. This will cause the `Response` object to return immediately with `isCancelled` set to true.
 
@@ -83,7 +83,7 @@ print(response.isCancelled); // TRUE
 ```
 
 
-## Data Parsing
+### Data Parsing
 
 To parse a data in Unwired requests, you should create a `Parser` object that tells the library how to parse the data.
 
@@ -103,7 +103,7 @@ APOD parse(Object data) {
 }
 ```
 
-## Using Managed Auth
+### Using Managed Auth
 
 Unwired supports managed authentication. You can create and use your own implementation of `AuthManager` class to manage the authentication in application and requests.
 
@@ -189,7 +189,6 @@ requestHandler.authenticate(token);
 ```
 
 To make authenticated requests, simply set the `auth` argument of the `request` or `get` or `post` methods to true. This will automatically include the `parsedAuthObject` to the Authentication header of the request.
-
 ```dart
 final cancellable = requestHandler.get(url: "...", auth: true);
 ```
