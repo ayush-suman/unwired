@@ -30,8 +30,8 @@ Fast and minimalistic Dart HTTP client library for
 In Unwired, requests are made using `RequestHandler()` object. However, before you can make any HTTP request, you should initialise the object. Initialising calls the `init()` functions of the `AuthManager` if you are using any, and the `HttpWorker` which processes your HTTP requests.
 
 ```dart
-final RequestHandler requestHandler = RequestHandler(); // Debug Http Worker will be used since no 
-// Http Worker is passed in the constructor
+final RequestHandler requestHandler = RequestHandler(); // Debug Http Worker will be used since
+// no Http Worker is passed in the constructor
 
 await requestHandler.initialise(); // Once the future completes, you can start making requests 
 // using this requestHandler object
