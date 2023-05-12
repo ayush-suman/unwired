@@ -90,17 +90,28 @@ To parse a data in Unwired requests, you should create a `Parser` object that te
 ```dart
 class APODParser extends Parser<APOD> {
 
-@override
-APOD parse(Object data) {
+  @override
+  APOD parse(Object data) {
     // Parse your data into your desired object (APOD in this case) here.
     // Using generators like freezed for your data class will give you a nice function to parse the data from JSON.
     // You can call that function here or throw if parsing fails. The error should be caught by the HTTP Worker 
     // And packed into the Response object.
-    
-    return apod;
-}
 
+    return apod;
+  }
 }
+```
+
+```dart
+final Cancellable<Response<APOD>> cancellable = requestHandler.get(
+    url: "https://api.nasa.gov/planetary/apod",
+    params: {"api_key": "DEMO_KEY"},
+    parser: APODParser(),
+);
+
+final Reponse<APOD> response = await cancellable.response;
+
+final APOD apod = response.data;  
 ```
 
 ### Using Managed Auth
@@ -108,7 +119,7 @@ APOD parse(Object data) {
 Unwired supports managed authentication. You can create and use your own implementation of `AuthManager` class to manage the authentication in application and requests.
 
 ```dart
-class TokenAuthManager extends AuthManager {
+class TokenAuthManager extends AuthManager<String> {
   TokenAuthManager({required this.secureStorage}) {
     secureStorage.read(key: _key).then((value) {
       _token = value;
@@ -134,27 +145,14 @@ class TokenAuthManager extends AuthManager {
   @override
   String? get authObject => _token;
 
-  Future _saveToken(String token) async {
+  Future authenticate(String token) async {
     await secureStorage.write(key: _key, value: token);
     _token = token;
   }
 
-  Future _deleteToken() async {
+  Future unauthenticate() async {
     await secureStorage.delete(key: _key);
     _token = null;
-  }
-
-  Future authenticate(dynamic token) async {
-    if (token is String) {
-      _saveToken(token);
-    } else {
-      throw UnsupportedError(
-          'Token of type ${token.runtimeType} is not supported');
-    }
-  }
-
-  Future unauthenticate() async {
-    await _deleteToken();
   }
 
   @override
