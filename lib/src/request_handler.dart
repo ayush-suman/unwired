@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:queue_manager/queue_manager.dart';
 import 'package:unwired/src/auth_manager/auth_manager.dart';
 import 'package:unwired/src/http_worker/http_worker.dart';
 import 'package:unwired/src/parser.dart';

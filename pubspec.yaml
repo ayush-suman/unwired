@@ -1,6 +1,6 @@
 name: unwired
 description: Unwired is a client library for handling (authenticated) multi-threaded disposable network calls, data parsing and authentication in applications.
-version: 0.8.0
+version: 0.8.1
 homepage: https://github.com/Ayush-Suman/unwired
 
 environment:
@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   http: ^0.13.5
+  store_manager: ^1.0.1
+  queue_manager: ^1.0.0
 
 
 dev_dependencies:
