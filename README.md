@@ -30,8 +30,11 @@ Fast and minimalistic Dart HTTP client library for
 In Unwired, requests are made using `RequestHandler()` object. However, before you can make any HTTP request, you should initialise the object. Initialising calls the `init()` functions of the `AuthManager` if you are using any, and the `HttpWorker` which processes your HTTP requests.
 
 ```dart
-final RequestHandler requestHandler = RequestHandler(); // Debug Http Worker will be used since no Http Worker is passed in the constructor
-await requestHandler.initialise(); // Once the future completes, you can start making requests using this requestHandler object
+final RequestHandler requestHandler = RequestHandler(); // Debug Http Worker will be used since no 
+// Http Worker is passed in the constructor
+
+await requestHandler.initialise(); // Once the future completes, you can start making requests 
+// using this requestHandler object
 ```
 
 ### Get Request
@@ -93,9 +96,9 @@ class APODParser extends Parser<APOD> {
   @override
   APOD parse(Object data) {
     // Parse your data into your desired object (APOD in this case) here.
-    // Using generators like freezed for your data class will give you a nice function to parse the data from JSON.
-    // You can call that function here or throw if parsing fails. The error should be caught by the HTTP Worker 
-    // And packed into the Response object.
+    // Using generators like freezed for your data class will give you a nice function to parse 
+    // the data from JSON. You can call that function here or throw if parsing fails. The error 
+    // should be caught by the HTTP Worker and packed into the Response object.
 
     return apod;
   }
