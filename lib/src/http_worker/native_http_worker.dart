@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:http_worker/http_worker.dart';
@@ -33,10 +32,9 @@ class DefaultHttpWorker extends HttpWorker {
       case RequestMethod.get:
         http.get(url, headers: header).then((value) {
           try {
-            final json = jsonDecode(value.body);
-            final data = parser?.parse(json);
+            final data = parser?.parse(value.body);
             sendPort.send(
-                {ID: id, DATA: data ?? json, STATUS_CODE: value.statusCode});
+                {ID: id, DATA: data ?? value.body, STATUS_CODE: value.statusCode});
           } catch (e) {
             sendPort.send({ID: id, STATUS_CODE: value.statusCode, ERROR: e});
           }
@@ -50,10 +48,9 @@ class DefaultHttpWorker extends HttpWorker {
       case RequestMethod.post:
         http.post(url, headers: header, body: body).then((value) {
           try {
-            final json = jsonDecode(value.body);
-            final data = parser?.parse(json);
+            final data = parser?.parse(value.body);
             sendPort.send(
-                {ID: id, DATA: data ?? json, STATUS_CODE: value.statusCode});
+                {ID: id, DATA: data ?? value.body, STATUS_CODE: value.statusCode});
           } catch (e) {
             sendPort.send({ID: id, STATUS_CODE: value.statusCode, ERROR: e});
           }
@@ -67,10 +64,9 @@ class DefaultHttpWorker extends HttpWorker {
       case RequestMethod.put:
         http.put(url, headers: header, body: body).then((value) {
           try {
-            final json = jsonDecode(value.body);
-            final data = parser?.parse(json);
+            final data = parser?.parse(value.body);
             sendPort.send(
-                {ID: id, DATA: data ?? json, STATUS_CODE: value.statusCode});
+                {ID: id, DATA: data ?? value.body, STATUS_CODE: value.statusCode});
           } catch (e) {
             sendPort.send({ID: id, STATUS_CODE: value.statusCode, ERROR: e});
           }
@@ -84,10 +80,9 @@ class DefaultHttpWorker extends HttpWorker {
       case RequestMethod.delete:
         http.delete(url, headers: header, body: body).then((value) {
           try {
-            final json = jsonDecode(value.body);
-            final data = parser?.parse(json);
+            final data = parser?.parse(value.body);
             sendPort.send(
-                {ID: id, DATA: data ?? json, STATUS_CODE: value.statusCode});
+                {ID: id, DATA: data ?? value.body, STATUS_CODE: value.statusCode});
           } catch (e) {
             sendPort.send({ID: id, STATUS_CODE: value.statusCode, ERROR: e});
           }
@@ -101,10 +96,9 @@ class DefaultHttpWorker extends HttpWorker {
       case RequestMethod.patch:
         http.patch(url, headers: header, body: body).then((value) {
           try {
-            final json = jsonDecode(value.body);
-            final data = parser?.parse(json);
+            final data = parser?.parse(value.body);
             sendPort.send(
-                {ID: id, DATA: data ?? json, STATUS_CODE: value.statusCode});
+                {ID: id, DATA: data ?? value.body, STATUS_CODE: value.statusCode});
           } catch (e) {
             sendPort.send({ID: id, STATUS_CODE: value.statusCode, ERROR: e});
           }
@@ -118,10 +112,9 @@ class DefaultHttpWorker extends HttpWorker {
       case RequestMethod.head:
         http.head(url, headers: header).then((value) {
           try {
-            final json = jsonDecode(value.body);
-            final data = parser?.parse(json);
+            final data = parser?.parse(value.body);
             sendPort.send(
-                {ID: id, DATA: data ?? json, STATUS_CODE: value.statusCode});
+                {ID: id, DATA: data ?? value.body, STATUS_CODE: value.statusCode});
           } catch (e) {
             sendPort.send({ID: id, STATUS_CODE: value.statusCode, ERROR: e});
           }
@@ -149,8 +142,14 @@ class DefaultHttpWorker extends HttpWorker {
   }
 
   @override
-  Completer<Response<T>> processRequest<T>(Object id, RequestMethod method,
-      Uri url, Map<String, String>? header, Object? body, Parser<T>? parser) {
+  (Completer<Response<T>>, {Object? meta}) processRequest<T>(
+      {required Object id,
+      required RequestMethod method,
+      required Uri url,
+      Map<String, String>? header,
+      Object? body,
+      Parser<T>? parser,
+      Object? meta}) {
     Completer<Response<T>> completer = Completer<Response<T>>();
 
     final ReceivePort receivePort = ReceivePort();
@@ -182,7 +181,7 @@ class DefaultHttpWorker extends HttpWorker {
       }
     });
 
-    return completer;
+    return (completer, meta: null);
   }
 
   @override

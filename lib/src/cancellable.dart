@@ -10,9 +10,15 @@ import 'package:http_worker/http_worker.dart';
 /// even after the response arrives. In that case, the [cancel] method will
 /// do nothing.
 class Cancellable<T> {
-  Cancellable(this._completer, {this.onCancel});
+  Cancellable(this._completer, {this.onCancel, this.meta});
 
   final Completer<Response<T>> _completer;
+
+  /// Http Worker returns a record of [Completer] and meta.
+  /// This meta can hold any information, depends on the implementation of
+  /// the [HttpWorker].
+  final Object? meta;
+
   Future<Response<T>> get response => _completer.future;
   Function()? onCancel;
 

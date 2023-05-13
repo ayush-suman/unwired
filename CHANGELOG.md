@@ -1,3 +1,6 @@
+## [0.8.5] - 13th May 2023.
+* RequestHandler now makes use of record to return Object? meta along with Completer<Response>. 
+
 ## [0.8.0] - 9th May 2023.
 * Native HTTP Worker Fixed
 

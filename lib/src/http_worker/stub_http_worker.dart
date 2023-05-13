@@ -9,8 +9,15 @@ class DefaultHttpWorker extends HttpWorker {
   }
 
   @override
-  Completer<Response<T>> processRequest<T>(Object id, RequestMethod method,
-      Uri url, Map<String, String>? header, Object? body, Parser<T>? parser) {
+  (Completer<Response<T>>, {Object? meta}) processRequest<T>(
+      {required Object id,
+        required RequestMethod method,
+        required Uri url,
+        Map<String, String>? header,
+        Object? body,
+        Parser<T>? parser,
+        Object? meta
+      }) {
     throw UnimplementedError('Unidentified platform');
   }
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:http_worker/http_worker.dart';
 import 'package:unwired/src/store_manager.dart';
@@ -18,8 +17,15 @@ class DebugHttpWorker extends HttpWorker {
   }
 
   @override
-  Completer<Response<T>> processRequest<T>(Object id, RequestMethod method,
-      Uri url, Map<String, String>? header, Object? body, Parser<T>? parser) {
+  (Completer<Response<T>>, {Object? meta}) processRequest<T>(
+      {required Object id,
+        required RequestMethod method,
+        required Uri url,
+        Map<String, String>? header,
+        Object? body,
+        Parser<T>? parser,
+        Object? meta
+      }) {
     Completer<Response<T>> completer = Completer<Response<T>>();
 
     _storeManager.storeRequestInfo(
@@ -34,16 +40,15 @@ class DebugHttpWorker extends HttpWorker {
       case RequestMethod.get:
         http.get(url, headers: header).then((value) {
           if (!completer.isCompleted) {
-            final json = jsonDecode(value.body);
             try {
-              T? data = parser?.parse(json);
+              T? data = parser?.parse(value.body);
               completer.complete(
-                  Response(status: value.statusCode, data: data ?? json));
+                  Response<T>(status: value.statusCode, data: data ?? value.body as T));
               print("GET Request to $url completed");
             } catch (e) {
               if (!completer.isCompleted) {
                 completer
-                    .complete(Response(status: value.statusCode, error: e));
+                    .complete(Response<T>(status: value.statusCode, error: e));
               }
             } finally {
               _storeManager.removeFromStore(id);
@@ -51,23 +56,22 @@ class DebugHttpWorker extends HttpWorker {
           }
         }, onError: (e) {
           if (!completer.isCompleted) {
-            completer.complete(Response(status: -1, error: e));
+            completer.complete(Response<T>(status: -1, error: e));
           }
         });
         break;
       case RequestMethod.post:
         http.post(url, headers: header, body: body).then((value) {
           if (!completer.isCompleted) {
-            final json = jsonDecode(value.body);
             try {
-              T? data = parser?.parse(json);
+              T? data = parser?.parse(value.body);
               completer.complete(
-                  Response(status: value.statusCode, data: data ?? json));
+                  Response<T>(status: value.statusCode, data: data ?? value.body as T));
               print("POST Request to $url completed");
             } catch (e) {
               if (!completer.isCompleted) {
                 completer
-                    .complete(Response(status: value.statusCode, error: e));
+                    .complete(Response<T>(status: value.statusCode, error: e));
               }
             } finally {
               _storeManager.removeFromStore(id);
@@ -75,23 +79,22 @@ class DebugHttpWorker extends HttpWorker {
           }
         }, onError: (e) {
           if (!completer.isCompleted) {
-            completer.complete(Response(status: -1, error: e));
+            completer.complete(Response<T>(status: -1, error: e));
           }
         });
         break;
       case RequestMethod.put:
         http.put(url, headers: header, body: body).then((value) {
           if (!completer.isCompleted) {
-            final json = jsonDecode(value.body);
             try {
-              T? data = parser?.parse(json);
+              T? data = parser?.parse(value.body);
               completer.complete(
-                  Response(status: value.statusCode, data: data ?? json));
+                  Response<T>(status: value.statusCode, data: data ?? value.body as T));
               print("PUT Request to $url completed");
             } catch (e) {
               if (!completer.isCompleted) {
                 completer
-                    .complete(Response(status: value.statusCode, error: e));
+                    .complete(Response<T>(status: value.statusCode, error: e));
               }
             } finally {
               _storeManager.removeFromStore(id);
@@ -99,23 +102,22 @@ class DebugHttpWorker extends HttpWorker {
           }
         }, onError: (e) {
           if (!completer.isCompleted) {
-            completer.complete(Response(status: -1, error: e));
+            completer.complete(Response<T>(status: -1, error: e));
           }
         });
         break;
       case RequestMethod.delete:
         http.delete(url, headers: header, body: body).then((value) {
           if (!completer.isCompleted) {
-            final json = jsonDecode(value.body);
             try {
-              T? data = parser?.parse(json);
+              T? data = parser?.parse(value.body);
               completer.complete(
-                  Response(status: value.statusCode, data: data ?? json));
+                  Response<T>(status: value.statusCode, data: data ?? value.body as T));
               print("DELETE Request to $url completed");
             } catch (e) {
               if (!completer.isCompleted) {
                 completer
-                    .complete(Response(status: value.statusCode, error: e));
+                    .complete(Response<T>(status: value.statusCode, error: e));
               }
             } finally {
               _storeManager.removeFromStore(id);
@@ -123,23 +125,22 @@ class DebugHttpWorker extends HttpWorker {
           }
         }, onError: (e) {
           if (!completer.isCompleted) {
-            completer.complete(Response(status: -1, error: e));
+            completer.complete(Response<T>(status: -1, error: e));
           }
         });
         break;
       case RequestMethod.patch:
         http.patch(url, headers: header, body: body).then((value) {
           if (!completer.isCompleted) {
-            final json = jsonDecode(value.body);
             try {
-              T? data = parser?.parse(json);
+              T? data = parser?.parse(value.body);
               completer.complete(
-                  Response(status: value.statusCode, data: data ?? json));
+                  Response<T>(status: value.statusCode, data: data ?? value.body as T));
               print("PATCH Request to $url completed");
             } catch (e) {
               if (!completer.isCompleted) {
                 completer
-                    .complete(Response(status: value.statusCode, error: e));
+                    .complete(Response<T>(status: value.statusCode, error: e));
               }
             } finally {
               _storeManager.removeFromStore(id);
@@ -147,23 +148,22 @@ class DebugHttpWorker extends HttpWorker {
           }
         }, onError: (e) {
           if (!completer.isCompleted) {
-            completer.complete(Response(status: -1, error: e));
+            completer.complete(Response<T>(status: -1, error: e));
           }
         });
         break;
       case RequestMethod.head:
         http.head(url, headers: header).then((value) {
           if (!completer.isCompleted) {
-            final json = jsonDecode(value.body);
             try {
-              T? data = parser?.parse(json);
+              T? data = parser?.parse(value.body);
               completer.complete(
-                  Response(status: value.statusCode, data: data ?? json));
+                  Response<T>(status: value.statusCode, data: data ?? value.body as T));
               print("HEAD Request to $url completed");
             } catch (e) {
               if (!completer.isCompleted) {
                 completer
-                    .complete(Response(status: value.statusCode, error: e));
+                    .complete(Response<T>(status: value.statusCode, error: e));
               }
             } finally {
               _storeManager.removeFromStore(id);
@@ -171,12 +171,12 @@ class DebugHttpWorker extends HttpWorker {
           }
         }, onError: (e) {
           if (!completer.isCompleted) {
-            completer.complete(Response(status: -1, error: e));
+            completer.complete(Response<T>(status: -1, error: e));
           }
         });
         break;
     }
-    return completer;
+    return (completer, meta: null);
   }
 
   @override

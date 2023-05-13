@@ -11,7 +11,6 @@ import 'package:unwired/src/cancellable.dart';
 class RequestHandler {
   RequestHandler(
       {
-
       /// [AuthManager] is used to store token or manage the state of authentication
       /// for an application.
       ///
@@ -92,7 +91,8 @@ class RequestHandler {
       Map<String, String>? header,
       Object? body,
       bool auth = false,
-      Parser<T>? parser}) {
+      Parser<T>? parser,
+      Object? meta}) {
     int id = _requestQueueManager.createNewQueueObject();
 
     // Add params to url for parsing into Uri
@@ -113,10 +113,16 @@ class RequestHandler {
           ? header = {'Authorization': _authManager!.parsedAuthObject}
           : header.addAll({'Authorization': _authManager!.parsedAuthObject});
 
-    Completer<Response<T>> completer =
-        _worker.processRequest<T>(id, method, uri, header, body, parser);
+    (Completer<Response<T>>,{Object? meta}) record = _worker.processRequest<T>(
+        id: id,
+        method: method,
+        url: uri,
+        header: header,
+        body: body,
+        parser: parser,
+        meta: meta);
 
-    return Cancellable(completer, onCancel: () {
+    return Cancellable(record.$1, meta: record.meta, onCancel: () {
       _killRequest(id);
     });
   }
