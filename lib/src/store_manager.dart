@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:http_worker/http_worker.dart';
 import 'package:store_manager/store_manager.dart';
 import 'package:unwired/src/constants.dart';
-import 'package:unwired/src/request_method.dart';
 
 /// A [StoreManager] to store request [Completer]s with the request id
 /// as the key and [Completer] of the request as the value.

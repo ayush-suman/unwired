@@ -1,12 +1,11 @@
 import 'dart:async';
 
+import 'package:http_worker/http_worker.dart';
+import 'package:auth_manager/auth_manager.dart';
 import 'package:queue_manager/queue_manager.dart';
-import 'package:unwired/src/auth_manager/auth_manager.dart';
 import 'package:unwired/src/http_worker/http_worker.dart';
-import 'package:unwired/src/parser.dart';
 import 'package:unwired/src/queue_manager.dart';
-import 'package:unwired/src/request_method.dart';
-import 'package:unwired/src/response.dart';
+import 'package:unwired/src/cancellable.dart';
 
 /// This is used to create HTTP requests.
 class RequestHandler {
