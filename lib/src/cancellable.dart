@@ -19,7 +19,6 @@ class Cancellable<T> {
   /// the [HttpWorker].
   final Object? meta;
 
-  Future<Response<T>> get response => _completer.future;
   Function()? onCancel;
 
   bool _cancelled = false;

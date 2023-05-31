@@ -10,3 +10,4 @@ const String STATUS_CODE = "STATUS_CODE";
 const String ERROR = "ERROR";
 const String COMPLETER = "COMPLETER";
 const String SEND_PORT = "SEND_PORT";
+const String ACTION = 'ACTION';

@@ -27,10 +27,10 @@ Fast and minimalistic Dart HTTP client library for
 
 ### Initialising
 
-In Unwired, requests are made using `RequestHandler()` object. However, before you can make any HTTP request, you should initialise the object. Initialising calls the `init()` functions of the `AuthManager` if you are using any, and the `HttpWorker` which processes your HTTP requests.
+In Unwired, requests are made using `RequestHandler` object. However, before you can make any HTTP request, you should initialise the object. Initialising calls the `synchronize()` function of the `AuthManager` if you are using any, and the `init()` function of `HttpWorker` which processes your HTTP requests.
 
 ```dart
-final RequestHandler requestHandler = RequestHandler(); // Debug Http Worker will be used since
+final RequestHandler<int> requestHandler = RequestHandler<int>(); // Debug Http Worker will be used since
 // no Http Worker is passed in the constructor
 
 await requestHandler.initialise(); // Once the future completes, you can start making requests 
@@ -40,18 +40,18 @@ await requestHandler.initialise(); // Once the future completes, you can start m
 ### Get Request
 
 ```dart
-final Cancellable cancellable = requestHandler.get(
+final Request request = requestHandler.get(
         url: "https://api.nasa.gov/planetary/apod", 
         params: {"api_key": "YOUR_API_KEY"}
     );
 
-final Response response = await cancellable.response;
+final Response response = await request.response;
 ```
 
 Or you can use the `request` method to make the request.
 
 ```dart
-final Cancellable cancellable = requestHandler.request(
+final Request request = requestHandler.request(
         method = RequestMethod.get,
         url = "https://api.nava.gov/planetary/apod",
         params = {"api_key", "YOUR_API_KEY"}
@@ -63,12 +63,12 @@ final Cancellable cancellable = requestHandler.request(
 POST request will be similar to the GET request. You can pass `body` to the method as well.
 
 ```dart
-final Cancellable cancellable = requestHandler.post(
+final Request request = requestHandler.post(
         url: "...",
         body: ... // Body can be of any type
     );
 
-final Response response = await cancellable.response;
+final Response response = await request.response;
 ```
 
 Similar to the case with GET request, you can use `request` to make the POST request. `request` method can be used to call other HTTP requests such as DELETE, PUT, PATCH etc.
@@ -78,9 +78,9 @@ Similar to the case with GET request, you can use `request` to make the POST req
 Cancelling is as simple as calling `cancel` method on `Cancellable` object. This will cause the `Response` object to return immediately with `isCancelled` set to true.
 
 ```dart
-cancellable.cancel();
+request.controller.cancel();
 
-final Response response = await cancellable.response();
+final Response response = await request.response;
 
 print(response.isCancelled); // TRUE
 ```
@@ -106,13 +106,13 @@ class APODParser extends Parser<APOD> {
 ```
 
 ```dart
-final Cancellable<APOD> cancellable = requestHandler.get(
+final Request<APOD> request = requestHandler.get(
     url: "https://api.nasa.gov/planetary/apod",
     params: {"api_key": "DEMO_KEY"},
     parser: APODParser(),
 );
 
-final Reponse<APOD> response = await cancellable.response;
+final Reponse<APOD> response = await request.response;
 
 final APOD apod = response.data;  
 ```
@@ -138,7 +138,7 @@ class TokenAuthManager extends AuthManager<String> {
     return _completer.future;
   }
 
-  String _key = 'a239jakps';
+  String _key = 'random_key';
   set key(String k) {
     _key = k;
   }
@@ -179,7 +179,7 @@ class TokenAuthManager extends AuthManager<String> {
 Pass your implementation of `AuthManager` to the `RequestHandler`.
 
 ```dart
-final RequestHandler requestHandler = RequestHandler(authManager: TokenAuthManager());
+final RequestHandler<int> requestHandler = RequestHandler<int>(authManager: TokenAuthManager());
 ```
 
 Now you can access the functions like `authenticate` and `unauthenticate` to manage the auth state of your app.
@@ -191,7 +191,7 @@ requestHandler.authenticate(token);
 
 To make authenticated requests, simply set the `auth` argument of the `request` or `get` or `post` methods to true. This will automatically include the `parsedAuthObject` to the Authentication header of the request.
 ```dart
-final Cancellable cancellable = requestHandler.get(url: "...", auth: true);
+final Request request = requestHandler.get(url: "...", auth: true);
 ```
 
 ## FAQs

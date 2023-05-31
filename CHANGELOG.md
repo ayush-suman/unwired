@@ -1,3 +1,12 @@
+## [0.9.1] - 1st June 2023.
+* RequestHandler's request, get and post functions now return GenericRequest<K, T> instead of Cancellable<T>.
+* GenericRequest<K, T> is an alias of a record that contains request id, controller (to cancel ongoing requests) and Future of response.
+* RequestHandler<int> can use Request<T>, an alias of GenericRequest<int, T> as the return of the functions.
+
+## [0.9.0] - 31st May 2023.
+* HTTP Worker now uses dart:io and dart:html to support HTTP requests.
+* Removed dependency on http package.
+
 ## [0.8.5] - 13th May 2023.
 * RequestHandler now makes use of record to return Object? meta along with Completer<Response>. 
 

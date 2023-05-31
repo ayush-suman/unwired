@@ -7,8 +7,11 @@ import 'package:unwired/src/http_worker/http_worker.dart';
 import 'package:unwired/src/queue_manager.dart';
 import 'package:unwired/src/cancellable.dart';
 
+typedef Request<T> = ({int id, Cancellable<T> controller, Future<Response<T>> response});
+typedef GenericRequest<K, T> = ({K id, Cancellable<T> controller, Future<Response<T>> response});
+
 /// This is used to create HTTP requests.
-class RequestHandler {
+class RequestHandler<K> {
   RequestHandler(
       {
       /// [AuthManager] is used to store token or manage the state of authentication
@@ -30,17 +33,24 @@ class RequestHandler {
       /// Currently, there are two implementations of [HttpWorker] available:
       /// [DebugHttpWorker] and [DefaultHttpWorker]. It is recommended to use
       /// [DefaultHttpWorker] in release mode.
-      HttpWorker? worker,
+      HttpWorker<K>? worker,
 
       /// [QueueManager] contains the strategy used to store the ongoing requests'
       /// meta data. This can be used to limit the maximum number of ongoing
       /// requests or to implement your own logic for managing the queue.
       ///
       /// [RequestIdQueueManager] is the default value of the [requestQueueManager].
-      QueueManager? requestQueueManager}) {
+      QueueManager<K>? requestQueueManager}) {
     _authManager = authManager;
-    _worker = worker ?? DebugHttpWorker();
-    _requestQueueManager = requestQueueManager ?? RequestIdQueueManager();
+    _worker = worker ?? DefaultHttpWorker<K>();
+    if (this is RequestHandler<int>) {
+      _requestQueueManager =
+          requestQueueManager ?? RequestIdQueueManager() as QueueManager<K>;
+    } else {
+      assert(requestQueueManager != null,
+          'requestQueueManager cannot be null for non int type. If you intend to use the default requestQueueManager, initialise RequestHandler as RequestHandler<int>().');
+      _requestQueueManager = requestQueueManager!;
+    }
   }
 
   /// This function should be called before making any requests.
@@ -61,7 +71,7 @@ class RequestHandler {
   /// [QueueManager] contains the strategy used to store the ongoing requests'
   /// meta data. This can be used to limit the maximum number of ongoing
   /// requests or to implement your own logic for managing the queue
-  late final QueueManager _requestQueueManager;
+  late final QueueManager<K> _requestQueueManager;
 
   /// [HttpWorker] does the job of processing requests.
   /// It can be used to process requests on separate
@@ -71,7 +81,7 @@ class RequestHandler {
   /// Currently, there are two implementations of [HttpWorker] available:
   /// [DebugHttpWorker] and [DefaultHttpWorker]. It is recommended to use
   /// [DefaultHttpWorker] in release mode.
-  late final HttpWorker _worker;
+  late final HttpWorker<K> _worker;
 
   /// [AuthManager] is used to store token or manage the state of authentication
   /// for an application.
@@ -81,10 +91,10 @@ class RequestHandler {
   /// authentication at all
   late final AuthManager? _authManager;
 
-  /// Function to make a network request and returns a [Cancellable]. The
+  /// Function to make a network request and returns the Request Id and a [Cancellable]. The
   /// [Cancellable] contains the [Future] of the [Response] of the request, and
   /// a [Cancellable.cancel] method to cancel the ongoing request before it completes.
-  Cancellable<T> request<T>(
+  GenericRequest<K, T> request<T>(
       {RequestMethod method = RequestMethod.get,
       required String url,
       Map<String, String>? params,
@@ -93,7 +103,7 @@ class RequestHandler {
       bool auth = false,
       Parser<T>? parser,
       Object? meta}) {
-    int id = _requestQueueManager.createNewQueueObject();
+    K id = _requestQueueManager.createNewQueueObject();
 
     // Add params to url for parsing into Uri
     if (url.contains('?')) {
@@ -113,7 +123,7 @@ class RequestHandler {
           ? header = {'Authorization': _authManager!.parsedAuthObject}
           : header.addAll({'Authorization': _authManager!.parsedAuthObject});
 
-    (Completer<Response<T>>,{Object? meta}) record = _worker.processRequest<T>(
+    (Completer<Response<T>>, {Object? meta}) record = _worker.processRequest<T>(
         id: id,
         method: method,
         url: uri,
@@ -122,13 +132,17 @@ class RequestHandler {
         parser: parser,
         meta: meta);
 
-    return Cancellable(record.$1, meta: record.meta, onCancel: () {
-      _killRequest(id);
-    });
+    return (
+      id: id,
+      controller: Cancellable(record.$1, meta: record.meta, onCancel: () {
+        _killRequest(id);
+      }),
+    response: record.$1.future
+    );
   }
 
   /// Function to make a GET network request
-  Cancellable<T> get<T>(
+  GenericRequest<K, T> get<T>(
       {required String url,
       Map<String, String>? params,
       Map<String, String>? header,
@@ -143,7 +157,7 @@ class RequestHandler {
   }
 
   /// Function to make a POST network request
-  Cancellable<T> post<T>(
+  GenericRequest<K, T> post<T>(
       {required String url,
       Map<String, String>? params,
       Map<String, String>? header,
@@ -194,7 +208,7 @@ class RequestHandler {
         'AuthManager is not set. Please set the initialise AuthManager before using this method');
   }
 
-  _killRequest(Object id) {
+  _killRequest(K id) {
     _worker
         .killRequest(id)
         .then((value) => _requestQueueManager.removeFromQueue(id));

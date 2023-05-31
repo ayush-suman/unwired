@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:http_worker/http_worker.dart';
 
-class DefaultHttpWorker extends HttpWorker {
+class DefaultHttpWorker<K> extends HttpWorker<K> {
   @override
   Future init() {
     throw UnimplementedError('Unidentified platform');
@@ -10,7 +10,7 @@ class DefaultHttpWorker extends HttpWorker {
 
   @override
   (Completer<Response<T>>, {Object? meta}) processRequest<T>(
-      {required Object id,
+      {required K id,
         required RequestMethod method,
         required Uri url,
         Map<String, String>? header,
@@ -22,12 +22,12 @@ class DefaultHttpWorker extends HttpWorker {
   }
 
   @override
-  destroy() {
+  Future killRequest(K id) {
     throw UnimplementedError('Unidentified platform');
   }
 
   @override
-  Future killRequest(Object id) {
+  destroy() {
     throw UnimplementedError('Unidentified platform');
   }
 }
