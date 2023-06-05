@@ -31,6 +31,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
         Object? meta
       }) {
     Completer<Response<T>> completer = Completer<Response<T>>();
+    print("Request in process");
 
     final List<int> bytes = <int>[];
 
@@ -85,9 +86,9 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
     header?.forEach(request.setRequestHeader);
 
     request.onLoad.first.then((_) {
-      var bytes = (request.response as ByteBuffer).asUint8List();
+      final Uint8List responseBytes = (request.response as ByteBuffer).asUint8List();
       final Encoding encoding = encodingForCharset(MediaType.parse(request.responseHeaders['content-type']??'application/octet-stream').parameters['charset']);
-      final String body = encoding.decode(bytes);
+      final String body = encoding.decode(responseBytes);
       final T? parsedBody = parser?.parse(body);
       completer.complete(Response<T>(status: request.status!, data: parsedBody ?? body as T));
       requestStoreManager.removeFromStore(id);
@@ -101,7 +102,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
     if (bytes.isEmpty) {
       request.send();
     } else {
-      request.send(bytes);
+      request.send(Uint8List.fromList(bytes));
     }
     return (completer, meta: null);
   }

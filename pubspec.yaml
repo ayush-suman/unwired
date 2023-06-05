@@ -1,6 +1,6 @@
 name: unwired
 description: Unwired is a fast and minimalistic Dart HTTP client library. It supports cancellable requests, managed authentication and multithreaded requests.
-version: 0.9.1
+version: 0.9.2
 homepage: https://github.com/Ayush-Suman/unwired
 
 environment:

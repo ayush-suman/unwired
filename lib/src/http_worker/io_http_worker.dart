@@ -82,12 +82,12 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
           }
         }
         final HttpClientResponse response = await request.close();
-        final Completer<List<int>> completer = Completer<List<int>>();
+        final Completer<Uint8List> completer = Completer<Uint8List>();
         final sink = ByteConversionSink.withCallback((bytes) {
           completer.complete(Uint8List.fromList(bytes));
         });
         response.listen(sink.add, onError: completer.completeError, onDone: sink.close);
-        final List<int> bytes = await completer.future;
+        final Uint8List bytes = await completer.future;
         final Encoding encoding = encodingForCharset(response.headers.contentType?.charset);
         final String body = encoding.decode(bytes);
         final parsedBody = parser?.parse(body);
