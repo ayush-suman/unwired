@@ -111,6 +111,7 @@ class RequestHandler<K> {
   /// [Cancellable] contains the [Future] of the [Response] of the request, and
   /// a [Cancellable.cancel] method to cancel the ongoing request before it completes.
   GenericRequest<K, T> request<T>(
+
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
       /// If the url is a full url, the [baseUrl] is ignored.
@@ -121,7 +122,8 @@ class RequestHandler<K> {
       Object? body,
       bool auth = false,
       Parser<T>? parser,
-      Map<String, Object?> meta = const {}}) {
+      Map<String, Object?>? meta}) {
+    if (meta == null) meta = {};
     K id = _requestQueueManager.createNewQueueObject();
 
     if (_baseUrl != null && !url.startsWith('http')) {
@@ -155,7 +157,6 @@ class RequestHandler<K> {
           ? header = {'Authorization': _authManager!.parsedAuthObject}
           : header.addAll({'Authorization': _authManager!.parsedAuthObject});
 
-
     (Completer<Response<T>>, {Object? meta}) record = _worker.processRequest<T>(
         id: id,
         method: method,
@@ -176,6 +177,7 @@ class RequestHandler<K> {
 
   /// Function to make a GET network request
   GenericRequest<K, T> get<T>(
+
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
       /// If the url is a full url, the [baseUrl] is ignored.
@@ -184,16 +186,13 @@ class RequestHandler<K> {
       Map<String, String>? header,
       bool auth = false,
       Parser<T>? parser}) {
-    return request(
-        url,
-        method: RequestMethod.get,
-        params: params,
-        auth: auth,
-        parser: parser);
+    return request(url,
+        method: RequestMethod.get, params: params, auth: auth, parser: parser);
   }
 
   /// Function to make a POST network request
   GenericRequest<K, T> post<T>(
+
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
       /// If the url is a full url, the [baseUrl] is ignored.
@@ -203,8 +202,7 @@ class RequestHandler<K> {
       Object? body,
       bool auth = false,
       Parser<T>? parser}) {
-    return request(
-        url,
+    return request(url,
         method: RequestMethod.post,
         params: params,
         body: body,

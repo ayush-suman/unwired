@@ -129,7 +129,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
       receivePort.listen((message) {
         HttpClient? client;
         final Map<String, Object?> data = (message as Map<String, Object?>);
-        final Map<String, Object?> meta = data[META] as Map<String, Object?>;
+        final Map<String, Object?> meta = data[META]! as Map<String, Object?>;
         client = meta["using_base_url"] as bool ? baseUrlClient : null;
         _getResponseOrKill(message, _storeManager, client);
       });
@@ -145,7 +145,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
       Map<String, String>? header,
       Object? body,
       Parser<T>? parser,
-      Map<String, Object?> meta = const {}}) {
+      Map<String, Object?>? meta}) {
 
     final Completer<Response<T>> completer = Completer<Response<T>>();
 

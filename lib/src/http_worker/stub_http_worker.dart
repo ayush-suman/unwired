@@ -16,7 +16,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
         Map<String, String>? header,
         Object? body,
         Parser<T>? parser,
-        Map<String, Object?> meta = const {}
+        Map<String, Object?>? meta
       }) {
     throw UnimplementedError('Unidentified platform');
   }
