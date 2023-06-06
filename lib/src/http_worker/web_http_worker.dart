@@ -28,7 +28,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
         Map<String, String>? header,
         Object? body,
         Parser<T>? parser,
-        Object? meta
+        Map<String, Object?> meta = const {}
       }) {
     Completer<Response<T>> completer = Completer<Response<T>>();
     print("Request in process");

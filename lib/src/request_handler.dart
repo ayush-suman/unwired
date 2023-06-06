@@ -7,13 +7,24 @@ import 'package:unwired/src/http_worker/http_worker.dart';
 import 'package:unwired/src/queue_manager.dart';
 import 'package:unwired/src/cancellable.dart';
 
-typedef Request<T> = ({int id, Cancellable<T> controller, Future<Response<T>> response});
-typedef GenericRequest<K, T> = ({K id, Cancellable<T> controller, Future<Response<T>> response});
+typedef Request<T> = ({
+  int id,
+  Cancellable<T> controller,
+  Future<Response<T>> response
+});
+typedef GenericRequest<K, T> = ({
+  K id,
+  Cancellable<T> controller,
+  Future<Response<T>> response
+});
 
 /// This is used to create HTTP requests.
 class RequestHandler<K> {
   RequestHandler(
       {
+      /// Should start with http:// or https://
+      String? baseUrl,
+
       /// [AuthManager] is used to store token or manage the state of authentication
       /// for an application.
       ///
@@ -41,6 +52,9 @@ class RequestHandler<K> {
       ///
       /// [RequestIdQueueManager] is the default value of the [requestQueueManager].
       QueueManager<K>? requestQueueManager}) {
+    assert((baseUrl != null) ? baseUrl.startsWith('http') : true,
+        'baseUrl cannot be null');
+    _baseUrl = baseUrl;
     _authManager = authManager;
     _worker = worker ?? DefaultHttpWorker<K>();
     if (this is RequestHandler<int>) {
@@ -67,6 +81,8 @@ class RequestHandler<K> {
       _worker.init()
     ]);
   }
+
+  late final String? _baseUrl;
 
   /// [QueueManager] contains the strategy used to store the ongoing requests'
   /// meta data. This can be used to limit the maximum number of ongoing
@@ -95,15 +111,31 @@ class RequestHandler<K> {
   /// [Cancellable] contains the [Future] of the [Response] of the request, and
   /// a [Cancellable.cancel] method to cancel the ongoing request before it completes.
   GenericRequest<K, T> request<T>(
+      /// The url can be the path of the endpoint or the full url.
+      /// If the url is a path, the [baseUrl] is prepended to the url.
+      /// If the url is a full url, the [baseUrl] is ignored.
+      String url,
       {RequestMethod method = RequestMethod.get,
-      required String url,
       Map<String, String>? params,
       Map<String, String>? header,
       Object? body,
       bool auth = false,
       Parser<T>? parser,
-      Object? meta}) {
+      Map<String, Object?> meta = const {}}) {
     K id = _requestQueueManager.createNewQueueObject();
+
+    if (_baseUrl != null && !url.startsWith('http')) {
+      if (_baseUrl!.endsWith('/') && url.startsWith('/')) {
+        url = _baseUrl! + url.substring(1);
+      } else if (!_baseUrl!.endsWith('/') && !url.startsWith('/')) {
+        url = _baseUrl! + '/' + url;
+      } else {
+        url = _baseUrl! + url;
+      }
+      meta.addAll({"using_base_url": true});
+    } else {
+      meta.addAll({"using_base_url": false});
+    }
 
     // Add params to url for parsing into Uri
     if (url.contains('?')) {
@@ -123,6 +155,7 @@ class RequestHandler<K> {
           ? header = {'Authorization': _authManager!.parsedAuthObject}
           : header.addAll({'Authorization': _authManager!.parsedAuthObject});
 
+
     (Completer<Response<T>>, {Object? meta}) record = _worker.processRequest<T>(
         id: id,
         method: method,
@@ -137,20 +170,23 @@ class RequestHandler<K> {
       controller: Cancellable(record.$1, meta: record.meta, onCancel: () {
         _killRequest(id);
       }),
-    response: record.$1.future
+      response: record.$1.future
     );
   }
 
   /// Function to make a GET network request
   GenericRequest<K, T> get<T>(
-      {required String url,
-      Map<String, String>? params,
+      /// The url can be the path of the endpoint or the full url.
+      /// If the url is a path, the [baseUrl] is prepended to the url.
+      /// If the url is a full url, the [baseUrl] is ignored.
+      String url,
+      {Map<String, String>? params,
       Map<String, String>? header,
       bool auth = false,
       Parser<T>? parser}) {
     return request(
+        url,
         method: RequestMethod.get,
-        url: url,
         params: params,
         auth: auth,
         parser: parser);
@@ -158,15 +194,18 @@ class RequestHandler<K> {
 
   /// Function to make a POST network request
   GenericRequest<K, T> post<T>(
-      {required String url,
-      Map<String, String>? params,
+      /// The url can be the path of the endpoint or the full url.
+      /// If the url is a path, the [baseUrl] is prepended to the url.
+      /// If the url is a full url, the [baseUrl] is ignored.
+      String url,
+      {Map<String, String>? params,
       Map<String, String>? header,
       Object? body,
       bool auth = false,
       Parser<T>? parser}) {
     return request(
+        url,
         method: RequestMethod.post,
-        url: url,
         params: params,
         body: body,
         auth: auth,

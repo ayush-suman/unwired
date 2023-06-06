@@ -18,9 +18,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
   late final Isolate _isolate;
   late final SendPort _sendPort;
 
-  void _getResponseOrKill(dynamic message, RequestStoreManager<K> requestStoreManager) {
-    final data = (message as Map<String, Object?>);
-
+  void _getResponseOrKill(Map<String, Object?> data, RequestStoreManager<K> requestStoreManager, HttpClient? withClient) {
     final K id = data[ID]! as K;
     final String action = data[ACTION]! as String;
 
@@ -36,7 +34,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
     final Parser<dynamic>? parser = data[PARSER] as Parser<dynamic>?;
     final SendPort sendPort = data[SEND_PORT]! as SendPort;
 
-    final HttpClient client = HttpClient();
+    final HttpClient client = withClient??HttpClient();
 
     client.openUrl(method.string, url).then((HttpClientRequest request) async {
       requestStoreManager.storeHttpRequest(requestId: id, request: request);
@@ -123,11 +121,17 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
     _isolate = await Isolate.spawn<SendPort>((sendPort) {
       final RequestStoreManager<K> _storeManager = RequestStoreManager<K>();
 
+      final HttpClient baseUrlClient = HttpClient();
+
       final receivePort = ReceivePort();
       sendPort.send(receivePort.sendPort);
 
       receivePort.listen((message) {
-        _getResponseOrKill(message, _storeManager);
+        HttpClient? client;
+        final Map<String, Object?> data = (message as Map<String, Object?>);
+        final Map<String, Object?> meta = data[META] as Map<String, Object?>;
+        client = meta["using_base_url"] as bool ? baseUrlClient : null;
+        _getResponseOrKill(message, _storeManager, client);
       });
     }, _receivePort.sendPort);
     _sendPort = await _receivePort.first;
@@ -141,7 +145,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
       Map<String, String>? header,
       Object? body,
       Parser<T>? parser,
-      Object? meta}) {
+      Map<String, Object?> meta = const {}}) {
 
     final Completer<Response<T>> completer = Completer<Response<T>>();
 
@@ -153,6 +157,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
       METHOD: method,
       HEADER: header,
       BODY: body,
+      META: meta,
       PARSER: parser,
       ACTION: 'request',
       SEND_PORT: _responsePort.sendPort,

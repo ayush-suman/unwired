@@ -3,6 +3,7 @@ const String METHOD = "METHOD";
 const String URL = "URL";
 const String HEADER = "HEADER";
 const String BODY = "BODY";
+const String META = "META";
 const String PARSER = "PARSER";
 const String RESPONSE = "RESPONSE";
 const String DATA = "DATA";
