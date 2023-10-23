@@ -1,3 +1,10 @@
+## [0.9.5] - 23rd Oct 2023.
+* Updated Default HTTP Worker for io devices to remove multithreaded supported.
+* Multithreaded HTTP Worker is now available as a separate package `multithreaded_http_worker`.
+
+## [0.9.4] - 7th June 2023.
+* Remove Auth Manager apis from Request Handler
+
 ## [0.9.1] - 1st June 2023.
 * RequestHandler's request, get and post functions now return GenericRequest<K, T> instead of Cancellable<T>.
 * GenericRequest<K, T> is an alias of a record that contains request id, controller (to cancel ongoing requests) and Future of response.

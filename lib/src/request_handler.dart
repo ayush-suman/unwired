@@ -12,14 +12,10 @@ typedef Request<T> = ({
   Cancellable<T> controller,
   Future<Response<T>> response
 });
-typedef GenericRequest<K, T> = ({
-  K id,
-  Cancellable<T> controller,
-  Future<Response<T>> response
-});
+
 
 /// This is used to create HTTP requests.
-class RequestHandler<K> {
+class RequestHandler {
   RequestHandler(
       {
       /// Should start with http:// or https://
@@ -44,28 +40,46 @@ class RequestHandler<K> {
       /// Currently, there are two implementations of [HttpWorker] available:
       /// [DebugHttpWorker] and [DefaultHttpWorker]. It is recommended to use
       /// [DefaultHttpWorker] in release mode.
-      HttpWorker<K>? worker,
+      HttpWorker? worker,
 
       /// [QueueManager] contains the strategy used to store the ongoing requests'
       /// meta data. This can be used to limit the maximum number of ongoing
       /// requests or to implement your own logic for managing the queue.
       ///
       /// [RequestIdQueueManager] is the default value of the [requestQueueManager].
-      QueueManager<K>? requestQueueManager}) {
+      QueueManager<int>? requestQueueManager}) {
     assert((baseUrl != null) ? baseUrl.startsWith('http') : true,
         'baseUrl cannot be null');
     _baseUrl = baseUrl;
     _authManager = authManager;
-    _worker = worker ?? DefaultHttpWorker<K>();
-    if (this is RequestHandler<int>) {
-      _requestQueueManager =
-          requestQueueManager ?? RequestIdQueueManager() as QueueManager<K>;
-    } else {
-      assert(requestQueueManager != null,
-          'requestQueueManager cannot be null for non int type. If you intend to use the default requestQueueManager, initialise RequestHandler as RequestHandler<int>().');
-      _requestQueueManager = requestQueueManager!;
-    }
+    _worker = worker ?? DefaultHttpWorker();
+    _requestQueueManager = requestQueueManager ?? RequestIdQueueManager();
   }
+
+  late final String? _baseUrl;
+
+  /// [QueueManager] contains the strategy used to store the ongoing requests'
+  /// meta data. This can be used to limit the maximum number of ongoing
+  /// requests or to implement your own logic for managing the queue
+  late final QueueManager<int> _requestQueueManager;
+
+  /// [HttpWorker] does the job of processing requests.
+  /// It can be used to process requests on separate
+  /// [Isolate](https://www.youtube.com/watch?v=vl_AaCgudcY)
+  /// or a pool of Isolates or for debugging and testing
+  ///
+  /// Currently, there are two implementations of [HttpWorker] available:
+  /// [DebugHttpWorker] and [DefaultHttpWorker]. It is recommended to use
+  /// [DefaultHttpWorker] in release mode.
+  late final HttpWorker _worker;
+
+  /// [AuthManager] is used to store token or manage the state of authentication
+  /// for an application.
+  ///
+  /// One can create their own [AuthManager] to create
+  /// their own implementation of managing the authentication or to not manage
+  /// authentication at all
+  late final AuthManager? _authManager;
 
   /// This function should be called before making any requests.
   /// It initialises the [AuthManager] and [HttpWorker].
@@ -82,35 +96,10 @@ class RequestHandler<K> {
     ]);
   }
 
-  late final String? _baseUrl;
-
-  /// [QueueManager] contains the strategy used to store the ongoing requests'
-  /// meta data. This can be used to limit the maximum number of ongoing
-  /// requests or to implement your own logic for managing the queue
-  late final QueueManager<K> _requestQueueManager;
-
-  /// [HttpWorker] does the job of processing requests.
-  /// It can be used to process requests on separate
-  /// [Isolate](https://www.youtube.com/watch?v=vl_AaCgudcY)
-  /// or a pool of Isolates or for debugging and testing
-  ///
-  /// Currently, there are two implementations of [HttpWorker] available:
-  /// [DebugHttpWorker] and [DefaultHttpWorker]. It is recommended to use
-  /// [DefaultHttpWorker] in release mode.
-  late final HttpWorker<K> _worker;
-
-  /// [AuthManager] is used to store token or manage the state of authentication
-  /// for an application.
-  ///
-  /// One can create their own [AuthManager] to create
-  /// their own implementation of managing the authentication or to not manage
-  /// authentication at all
-  late final AuthManager? _authManager;
-
   /// Function to make a network request and returns the Request Id and a [Cancellable]. The
   /// [Cancellable] contains the [Future] of the [Response] of the request, and
   /// a [Cancellable.cancel] method to cancel the ongoing request before it completes.
-  GenericRequest<K, T> request<T>(
+  Request<T> request<T>(
 
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
@@ -124,7 +113,7 @@ class RequestHandler<K> {
       Parser<T>? parser,
       Map<String, Object?>? meta}) {
     if (meta == null) meta = {};
-    K id = _requestQueueManager.createNewQueueObject();
+    int id = _requestQueueManager.createNewQueueObject();
 
     if (_baseUrl != null && !url.startsWith('http')) {
       if (_baseUrl!.endsWith('/') && url.startsWith('/')) {
@@ -152,10 +141,15 @@ class RequestHandler<K> {
     Uri uri = Uri.parse(url);
 
     // Add auth token if auth is true
-    if (auth && _authManager != null)
-      header == null
-          ? header = {'Authorization': _authManager!.parsedAuthObject}
-          : header.addAll({'Authorization': _authManager!.parsedAuthObject});
+    if (auth)
+      if (_authManager != null) {
+        header == null
+            ? header = {'Authorization': _authManager!.parsedAuthObject}
+            : header.addAll({'Authorization': _authManager!.parsedAuthObject});
+      } else {
+        throw UnsupportedError(
+            'AuthManager is not set. Please set the initialise AuthManager before using this method');
+      }
 
     (Completer<Response<T>>, {Object? meta}) record = _worker.processRequest<T>(
         id: id,
@@ -176,7 +170,7 @@ class RequestHandler<K> {
   }
 
   /// Function to make a GET network request
-  GenericRequest<K, T> get<T>(
+  Request<T> get<T>(
 
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
@@ -191,7 +185,7 @@ class RequestHandler<K> {
   }
 
   /// Function to make a POST network request
-  GenericRequest<K, T> post<T>(
+  Request<T> post<T>(
 
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
@@ -210,42 +204,7 @@ class RequestHandler<K> {
         parser: parser);
   }
 
-  /// Stores the auth object, such as a JWT Token String,
-  /// and updates the authentication state [AuthManager.isAuthenticated] to `true`.
-  /// It does not assume anything about the auth object, and
-  /// therefore can be used to store any kind of auth object.
-  /// Make sure to set the [authManager] accordingly to store the
-  /// kind of object you want to use.
-  Future authenticate(Object token) async {
-    if (_authManager != null) {
-      await _authManager!.authenticate(token);
-    } else {
-      throw UnimplementedError(
-          'AuthManager is not set. Please set the initialise AuthManager before using this method');
-    }
-  }
-
-  /// Removes the auth object and updates the authentication state
-  /// [AuthManager.isAuthenticated] to `false`.
-  Future unauthenticate() async {
-    if (_authManager != null) {
-      await _authManager?.unauthenticate();
-    } else {
-      throw UnimplementedError(
-          'AuthManager is not set. Please set the initialise AuthManager before using this method');
-    }
-  }
-
-  /// Returns the authentication state of the application.
-  bool get isAuthenticated {
-    if (_authManager != null) {
-      return _authManager!.isAuthenticated;
-    }
-    throw Exception(
-        'AuthManager is not set. Please set the initialise AuthManager before using this method');
-  }
-
-  _killRequest(K id) {
+  _killRequest(int id) {
     _worker
         .killRequest(id)
         .then((value) => _requestQueueManager.removeFromQueue(id));

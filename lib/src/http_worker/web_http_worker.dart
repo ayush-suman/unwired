@@ -14,15 +14,18 @@ import '../utils.dart';
 /// simplest implementation of [HttpWorker]. You can override the default
 /// setting in [RequestHandler] to use this for both web and native platforms
 /// for its simplicity.
-class DefaultHttpWorker<K> extends HttpWorker<K> {
-  final RequestStoreManager<K> requestStoreManager = RequestStoreManager<K>();
+class DefaultHttpWorker extends HttpWorker {
+  DefaultHttpWorker({this.debug = true}): super();
+
+  final bool debug;
+  final RequestStoreManager requestStoreManager = RequestStoreManager();
 
   @override
   Future init() async {}
 
   @override
   (Completer<Response<T>>, {Object? meta}) processRequest<T>(
-      {required K id,
+      {required int id,
         required RequestMethod method,
         required Uri url,
         Map<String, String>? header,
@@ -88,8 +91,8 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
     request.onLoad.first.then((_) {
       final Uint8List responseBytes = (request.response as ByteBuffer).asUint8List();
       final Encoding encoding = encodingForCharset(MediaType.parse(request.responseHeaders['content-type']??'application/octet-stream').parameters['charset']);
-      final String body = encoding.decode(responseBytes);
-      final T? parsedBody = parser?.parse(body);
+      final String responseBody = encoding.decode(responseBytes);
+      final T? parsedBody = parser?.parse(responseBody);
       completer.complete(Response<T>(status: request.status!, data: parsedBody ?? body as T));
       requestStoreManager.removeFromStore(id);
     });
@@ -108,7 +111,7 @@ class DefaultHttpWorker<K> extends HttpWorker<K> {
   }
 
   @override
-  Future killRequest(K id) async {
+  Future killRequest(int id) async {
     requestStoreManager.cancelRequest(requestId: id);
   }
 

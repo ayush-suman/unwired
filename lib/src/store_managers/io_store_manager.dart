@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:store_manager/store_manager.dart';
 
-class RequestStoreManager<K> extends StoreManager<K, HttpClientRequest> {
-  void storeHttpRequest({required K requestId, required HttpClientRequest request}) {
+class RequestStoreManager extends StoreManager<int, HttpClientRequest> {
+  void storeHttpRequest({required int requestId, required HttpClientRequest request}) {
     addToStore({requestId: request});
   }
 
-  cancelRequest({required K requestId}) {
+  cancelRequest({required int requestId}) {
     getFromStore(requestId).abort();
     removeFromStore(requestId);
   }
 
   @override
-  Map<K, HttpClientRequest> createNewStoreObject() {
+  Map<int, HttpClientRequest> createNewStoreObject() {
     throw UnsupportedError('Cannot create new request objects using this function');
   }
 
