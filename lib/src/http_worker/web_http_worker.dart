@@ -93,7 +93,7 @@ class DefaultHttpWorker extends HttpWorker {
       final Encoding encoding = encodingForCharset(MediaType.parse(request.responseHeaders['content-type']??'application/octet-stream').parameters['charset']);
       final String responseBody = encoding.decode(responseBytes);
       final T? parsedBody = parser?.parse(responseBody);
-      completer.complete(Response<T>(status: request.status!, data: parsedBody ?? body as T));
+      completer.complete(Response<T>(status: request.status!, data: parsedBody ?? responseBody as T));
       requestStoreManager.removeFromStore(id);
     });
 

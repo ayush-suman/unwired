@@ -90,7 +90,7 @@ class DefaultHttpWorker extends HttpWorker {
         final Encoding encoding = encodingForCharset(response.headers.contentType?.charset);
         final String responseBody = encoding.decode(bytes);
         final parsedBody = parser?.parse(responseBody);
-        completer.complete(Response<T>(status: response.statusCode, data: parsedBody ?? body as T));
+        completer.complete(Response<T>(status: response.statusCode, data: parsedBody ?? responseBody as T));
         requestStoreManager.removeFromStore(id);
       } catch (e) {
         completer.complete(Response<T>(status: -1, error: e));
