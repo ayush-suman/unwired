@@ -14,14 +14,14 @@ import '../utils.dart';
 /// simplest implementation of [HttpWorker]. You can override the default
 /// setting in [RequestHandler] to use this for both web and native platforms
 /// for its simplicity.
-class DefaultHttpWorker extends HttpWorker {
+class DefaultHttpWorker extends HttpWorker<int> {
   DefaultHttpWorker({this.debug = true}): super();
 
   final bool debug;
   final RequestStoreManager requestStoreManager = RequestStoreManager();
 
   @override
-  Future init() async {}
+  Future init({String? host, int? port}) async {}
 
   @override
   (Completer<Response<T>>, {Object? meta}) processRequest<T>(

@@ -40,7 +40,7 @@ class RequestHandler {
       /// Currently, there are two implementations of [HttpWorker] available:
       /// [DebugHttpWorker] and [DefaultHttpWorker]. It is recommended to use
       /// [DefaultHttpWorker] in release mode.
-      HttpWorker? worker,
+      HttpWorker<int>? worker,
 
       /// [QueueManager] contains the strategy used to store the ongoing requests'
       /// meta data. This can be used to limit the maximum number of ongoing
@@ -50,13 +50,13 @@ class RequestHandler {
       QueueManager<int>? requestQueueManager}) {
     assert((baseUrl != null) ? baseUrl.startsWith('http') : true,
         'baseUrl cannot be null');
-    _baseUrl = baseUrl;
+    _baseUrl = (baseUrl!=null) ? Uri.parse(baseUrl) : null;
     _authManager = authManager;
     _worker = worker ?? DefaultHttpWorker();
     _requestQueueManager = requestQueueManager ?? RequestIdQueueManager();
   }
 
-  late final String? _baseUrl;
+  late final Uri? _baseUrl;
 
   /// [QueueManager] contains the strategy used to store the ongoing requests'
   /// meta data. This can be used to limit the maximum number of ongoing
@@ -92,7 +92,7 @@ class RequestHandler {
   Future initialise() async {
     return Future.wait([
       if (_authManager != null) _authManager!.synchronize(),
-      _worker.init()
+      _worker.init(host: _baseUrl?.host, port: _baseUrl?.port)
     ]);
   }
 
@@ -104,7 +104,7 @@ class RequestHandler {
       /// The url can be the path of the endpoint or the full url.
       /// If the url is a path, the [baseUrl] is prepended to the url.
       /// If the url is a full url, the [baseUrl] is ignored.
-      String url,
+      String path,
       {RequestMethod method = RequestMethod.get,
       Map<String, String>? params,
       Map<String, String>? header,
@@ -115,30 +115,20 @@ class RequestHandler {
     if (meta == null) meta = {};
     int id = _requestQueueManager.createNewQueueObject();
 
-    if (_baseUrl != null && !url.startsWith('http')) {
-      if (_baseUrl!.endsWith('/') && url.startsWith('/')) {
-        url = _baseUrl! + url.substring(1);
-      } else if (!_baseUrl!.endsWith('/') && !url.startsWith('/')) {
-        url = _baseUrl! + '/' + url;
-      } else {
-        url = _baseUrl! + url;
-      }
-      meta.addAll({"using_base_url": true});
-    } else {
-      meta.addAll({"using_base_url": false});
-    }
+    Uri url = Uri.parse(path);
 
     // Add params to url for parsing into Uri
-    if (url.contains('?')) {
-      url = params != null
-          ? '$url&${params.entries.map((e) => "${e.key}=${e.value}").join('&')}'
-          : url;
+    url.replace(queryParameters: url.queryParameters..addAll(params ?? {}));
+
+    // Add baseUrl if url is a path
+    if (_baseUrl != null && url.host == '') {
+      assert(_baseUrl!.host != '', 'No baseUrl passed');
+      url = _baseUrl!.resolveUri(url);
+      meta.addAll({"using_base_url": true});
     } else {
-      url = params != null
-          ? '$url?${params.entries.map((e) => "${e.key}=${e.value}").join('&')}'
-          : url;
+      assert(url.host != '', 'No host passed');
+      meta.addAll({"using_base_url": false});
     }
-    Uri uri = Uri.parse(url);
 
     // Add auth token if auth is true
     if (auth)
@@ -154,7 +144,7 @@ class RequestHandler {
     (Completer<Response<T>>, {Object? meta}) record = _worker.processRequest<T>(
         id: id,
         method: method,
-        url: uri,
+        url: url,
         header: header,
         body: body,
         parser: parser,

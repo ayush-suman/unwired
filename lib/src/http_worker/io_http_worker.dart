@@ -12,7 +12,7 @@ import '../utils.dart';
 /// separate [Isolate](https://www.youtube.com/watch?v=vl_AaCgudcY). By default,
 /// it is used by native devices as the web platform does not support
 /// [Isolate](https://www.youtube.com/watch?v=vl_AaCgudcY)s.
-class DefaultHttpWorker extends HttpWorker {
+class DefaultHttpWorker extends HttpWorker<int> {
   DefaultHttpWorker({this.debug = true}): super();
 
   final bool debug;
@@ -20,7 +20,7 @@ class DefaultHttpWorker extends HttpWorker {
   late final HttpClient client;
 
   @override
-  Future init() async {
+  Future init({String? host, int? port}) async {
     client = HttpClient();
   }
 

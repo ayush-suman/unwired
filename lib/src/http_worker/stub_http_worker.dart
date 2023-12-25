@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:http_worker/http_worker.dart';
 
-class DefaultHttpWorker extends HttpWorker {
+class DefaultHttpWorker extends HttpWorker<int> {
   DefaultHttpWorker({this.debug = true}): super();
 
   final bool debug;
 
   @override
-  Future init() {
+  Future init({String? host, int? port}) {
     throw UnimplementedError('Unidentified platform');
   }
 
