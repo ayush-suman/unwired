@@ -1,5 +1,5 @@
 ## [0.9.7] - 25th Dec 2023.
-* Add support for base Url in host and port in HTTP Worker.
+* Add support for optional host and port in HTTP Worker.
 
 ## [0.9.5] - 23rd Oct 2023.
 * Updated Default HTTP Worker for io devices to remove multithreaded supported.

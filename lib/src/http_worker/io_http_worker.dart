@@ -20,7 +20,7 @@ class DefaultHttpWorker extends HttpWorker<int> {
   late final HttpClient client;
 
   @override
-  Future init({String? host, int? port}) async {
+  Future init({Uri? baseUrl}) async {
     client = HttpClient();
   }
 
@@ -82,10 +82,10 @@ class DefaultHttpWorker extends HttpWorker<int> {
         }
         final HttpClientResponse response = await request.close();
         final Completer<Uint8List> responseCompleter = Completer<Uint8List>();
-        final sink = ByteConversionSink.withCallback((bytes) {
+        final ByteConversionSink sink = ByteConversionSink.withCallback((bytes) {
           responseCompleter.complete(Uint8List.fromList(bytes));
         });
-        response.listen(sink.add, onError: completer.completeError, onDone: sink.close);
+        response.listen(sink.add, onError: responseCompleter.completeError, onDone: sink.close);
         final Uint8List bytes = await responseCompleter.future;
         final Encoding encoding = encodingForCharset(response.headers.contentType?.charset);
         final String responseBody = encoding.decode(bytes);
@@ -93,7 +93,7 @@ class DefaultHttpWorker extends HttpWorker<int> {
         completer.complete(Response<T>(status: response.statusCode, data: parsedBody ?? responseBody as T));
         requestStoreManager.removeFromStore(id);
       } catch (e) {
-        completer.complete(Response<T>(status: -1, error: e));
+        completer.completeError(e);
         requestStoreManager.removeFromStore(id);
       }
     });

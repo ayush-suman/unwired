@@ -8,7 +8,7 @@ class DefaultHttpWorker extends HttpWorker<int> {
   final bool debug;
 
   @override
-  Future init({String? host, int? port}) {
+  Future init({Uri? baseUrl}) {
     throw UnimplementedError('Unidentified platform');
   }
 

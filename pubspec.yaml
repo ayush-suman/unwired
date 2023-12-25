@@ -7,7 +7,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  http_worker: ^1.3.5
+  http_worker: ^1.3.7
   auth_manager: ^1.2.1
   store_manager: ^1.1.0
   queue_manager: ^1.1.0

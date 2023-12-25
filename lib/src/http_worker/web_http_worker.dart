@@ -21,7 +21,7 @@ class DefaultHttpWorker extends HttpWorker<int> {
   final RequestStoreManager requestStoreManager = RequestStoreManager();
 
   @override
-  Future init({String? host, int? port}) async {}
+  Future init({Uri? baseUrl}) async {}
 
   @override
   (Completer<Response<T>>, {Object? meta}) processRequest<T>(
@@ -98,7 +98,7 @@ class DefaultHttpWorker extends HttpWorker<int> {
     });
 
     request.onError.first.then((e) {
-      completer.complete(Response<T>(status: -1, error: e));
+      completer.completeError(e);
       requestStoreManager.removeFromStore(id);
     });
 

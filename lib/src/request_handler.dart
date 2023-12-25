@@ -92,7 +92,7 @@ class RequestHandler {
   Future initialise() async {
     return Future.wait([
       if (_authManager != null) _authManager!.synchronize(),
-      _worker.init(host: _baseUrl?.host, port: _baseUrl?.port)
+      _worker.init(baseUrl: _baseUrl)
     ]);
   }
 
